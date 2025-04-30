@@ -6,10 +6,13 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { loginSchema, signupSchema } from "@/schema/auth.schema";
 import { actionClient } from "./safe-actions";
-import { ServerActionResponse } from "@/types/common/utils.type";
+import { AppConfig } from "@/lib/config";
+import { actionOutputSchema } from "@/schema/action.schema";
 
 export const login = actionClient
   .schema(loginSchema)
+  .outputSchema(actionOutputSchema)
+
   .action(async ({ parsedInput: { email, password } }) => {
     const supabase = await createClient();
 
@@ -27,15 +30,16 @@ export const login = actionClient
         status: "error",
         message: error.message,
         data: null,
-      } satisfies ServerActionResponse<null>;
+      };
     }
 
     revalidatePath("/", "layout");
-    redirect("/");
+    redirect(AppConfig.homeRoute);
   });
 
 export const signup = actionClient
   .schema(signupSchema)
+  .outputSchema(actionOutputSchema)
   .action(async ({ parsedInput: { email, password, username } }) => {
     const supabase = await createClient();
     // type-casting here for convenience
@@ -59,11 +63,11 @@ export const signup = actionClient
         status: "error",
         message: error.message,
         data: null,
-      } satisfies ServerActionResponse<null>;
+      };
     }
 
     revalidatePath("/", "layout");
-    redirect("/");
+    redirect(AppConfig.homeRoute);
   });
 
 export const logout = actionClient.action(async () => {
@@ -76,7 +80,7 @@ export const logout = actionClient.action(async () => {
       status: "error",
       message: error.message,
       data: null,
-    } satisfies ServerActionResponse<null>;
+    };
   }
 
   revalidatePath("/", "layout");

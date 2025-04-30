@@ -7,9 +7,13 @@ import Copyright from "./Copyright";
 
 type AuthUiWrapperProps = {
   children: React.ReactNode;
+  disableCopyright?: boolean;
 };
 
-const AuthUiWrapper = ({ children }: AuthUiWrapperProps) => {
+const AuthUiWrapper = ({
+  children,
+  disableCopyright = false,
+}: AuthUiWrapperProps) => {
   return (
     <div className="relative h-dvh w-dvw overflow-hidden flex flex-col items-center justify-center">
       <InteractiveGridPattern
@@ -22,9 +26,11 @@ const AuthUiWrapper = ({ children }: AuthUiWrapperProps) => {
       <div className="z-100 bg-background rounded-lg w-max h-max border shadow-md">
         {children}
       </div>
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-center w-full">
-        <Copyright />
-      </div>
+      {!disableCopyright && (
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-center w-full">
+          <Copyright />
+        </div>
+      )}
     </div>
   );
 };
