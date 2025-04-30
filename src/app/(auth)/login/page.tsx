@@ -1,8 +1,8 @@
 "use client";
 
-import Logo from "@/assets/logo.png";
 import AuthUiWrapper from "@/components/shared/AuthUiWrapper";
 import ErrorMessage from "@/components/shared/ErrorMessage";
+import Logo from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -25,7 +25,6 @@ import { loginSchema } from "@/schema/auth.schema";
 import { login } from "@/services/actions/auth.actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAction } from "next-safe-action/hooks";
-import Image from "next/image";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -43,11 +42,9 @@ const LoginPage = () => {
   return (
     <AuthUiWrapper>
       <div className="flex flex-col items-center justify-center">
-        <Card className="shadow-none border-0 w-[28rem]">
+        <Card className="shadow-none border-0 w-sm md:w-[28rem]">
           <CardHeader className="flex flex-col items-center">
-            <div className="rounded-md w-24 h-24 flex items-center justify-center overflow-hidden -ml-4">
-              <Image src={Logo} alt="Logo" width={100} height={100} />
-            </div>
+            <Logo />
             <CardTitle className="text-2xl">Welcome back!</CardTitle>
             <CardDescription className="text-center">
               Turn spreadsheets into conversations.

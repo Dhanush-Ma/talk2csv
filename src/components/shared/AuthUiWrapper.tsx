@@ -22,7 +22,7 @@ const AuthUiWrapper = ({ children }: AuthUiWrapperProps) => {
       <div className="z-100 bg-background rounded-lg w-max h-max border shadow-md">
         {children}
       </div>
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-center">
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-center w-full">
         <Copyright />
       </div>
     </div>

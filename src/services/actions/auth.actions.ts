@@ -65,3 +65,20 @@ export const signup = actionClient
     revalidatePath("/", "layout");
     redirect("/");
   });
+
+export const logout = actionClient.action(async () => {
+  const supabase = await createClient();
+
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    return {
+      status: "error",
+      message: error.message,
+      data: null,
+    } satisfies ServerActionResponse<null>;
+  }
+
+  revalidatePath("/", "layout");
+  redirect("/login");
+});

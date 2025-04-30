@@ -1,11 +1,11 @@
 import React from "react";
-import Talk2CsvLogo from "@/assets/talk2csv.svg";
 import Image from "next/image";
+import LogoImg from "@/assets/logo.png";
 
 const Logo = () => {
   return (
-    <div>
-      <Image priority src={Talk2CsvLogo} alt="talk2csv Logo" />
+    <div className="">
+      <Image src={LogoImg} alt="Logo" width={100} height={100} />
     </div>
   );
 };

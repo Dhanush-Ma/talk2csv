@@ -9,9 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import Image from "next/image";
 import React from "react";
-import Logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { PasswordInput } from "@/components/ui/password-input";
 import Link from "next/link";
@@ -30,6 +28,7 @@ import {
 import { useAction } from "next-safe-action/hooks";
 import { signup } from "@/services/actions/auth.actions";
 import ErrorMessage from "@/components/shared/ErrorMessage";
+import Logo from "@/components/shared/Logo";
 
 const SignUpPage = () => {
   const { execute, result, isExecuting } = useAction(signup);
@@ -44,15 +43,11 @@ const SignUpPage = () => {
   return (
     <AuthUiWrapper>
       <div className="flex flex-col items-center justify-center">
-        <Card className="shadow-none border-0 w-[28rem]">
+        <Card className="shadow-none border-0 w-sm md:w-[28rem]">
           <CardHeader className="flex flex-col items-center">
-            <div className="rounded-md w-24 h-24 flex items-center justify-center overflow-hidden -ml-4">
-              <Image src={Logo} alt="Logo" width={100} height={100} />
-            </div>
-            <CardTitle className="text-2xl">
-              <CardTitle className="text-2xl">
-                Let’s get you talking to your data
-              </CardTitle>
+            <Logo />
+            <CardTitle className="text-2xl text-center">
+              Let’s get you talking to your data
             </CardTitle>
             <CardDescription className="text-center">
               Turn spreadsheets into conversations.
