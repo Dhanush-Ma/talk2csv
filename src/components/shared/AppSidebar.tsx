@@ -17,6 +17,7 @@ import { AppConfig } from "@/lib/config";
 import Logo from "./Logo";
 import NavSidebarUser from "./NavSidebarUser";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 // Menu items.
 const items = [
@@ -34,6 +35,7 @@ const items = [
 
 export function AppSidebar() {
   const { state } = useSidebar();
+  const pathname = usePathname();
 
   return (
     <Sidebar collapsible="icon">
@@ -70,7 +72,11 @@ export function AppSidebar() {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild tooltip={item.title}>
+                  <SidebarMenuButton
+                    asChild
+                    tooltip={item.title}
+                    isActive={pathname.startsWith(item.url)}
+                  >
                     <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>

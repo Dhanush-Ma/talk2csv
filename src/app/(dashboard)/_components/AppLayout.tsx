@@ -20,7 +20,7 @@ const AppLayout = ({ user, children }: AppLayoutProps) => {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className="px-10 py-4">{children}</main>
+      <main>{children}</main>
     </SidebarProvider>
   );
 };
