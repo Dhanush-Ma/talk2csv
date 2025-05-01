@@ -1,7 +1,7 @@
 import React from "react";
 
 const page = () => {
-  return <div>Chat</div>;
+  return <div>Chat Page</div>;
 };
 
 export default page;

@@ -1,6 +1,6 @@
 "use client";
 import { AppSidebar } from "@/components/shared/AppSidebar";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { SelectUser } from "@/db/schema/user";
 import { useUserStore } from "@/store/user.store";
 import React from "react";
@@ -20,10 +20,7 @@ const AppLayout = ({ user, children }: AppLayoutProps) => {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main>
-        <SidebarTrigger />
-        {children}
-      </main>
+      <main className="px-10 py-4">{children}</main>
     </SidebarProvider>
   );
 };

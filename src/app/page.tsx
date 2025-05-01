@@ -1,4 +1,3 @@
-import Logout from "@/components/shared/Logout";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function Home() {
@@ -9,7 +8,6 @@ export default async function Home() {
     <div className="flex flex-col items-center justify-center min-h-screen p-24">
       <p>Landing Page</p>
       <p>{data.user?.email}</p>
-      {data.user && <Logout />}
     </div>
   );
 }

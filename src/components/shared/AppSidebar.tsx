@@ -1,60 +1,80 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
+import { Database, MessageSquareText } from "lucide-react";
 
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar";
+import { AppConfig } from "@/lib/config";
+import Logo from "./Logo";
+import NavSidebarUser from "./NavSidebarUser";
+import Link from "next/link";
 
 // Menu items.
 const items = [
   {
-    title: "Home",
-    url: "#",
-    icon: Home,
+    title: "Data Vault",
+    url: "/vault",
+    icon: Database,
   },
   {
-    title: "Inbox",
-    url: "#",
-    icon: Inbox,
-  },
-  {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
-  },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
+    title: "Conversations",
+    url: "/chat",
+    icon: MessageSquareText,
   },
 ];
 
 export function AppSidebar() {
+  const { state } = useSidebar();
+
   return (
-    <Sidebar>
+    <Sidebar collapsible="icon">
+      <SidebarHeader className="border-b-2">
+        <SidebarMenu>
+          <SidebarMenuItem className="flex items-center justify-between">
+            <SidebarMenuButton
+              asChild
+              className="hover:bg-transparent p- w-max h-max"
+            >
+              {state === "expanded" ? (
+                <a>
+                  <Logo transparent width={24} height={24} className="mt-1" />
+                  <span className="font-semibold text-lg text-primary">
+                    {AppConfig.name}
+                  </span>
+                </a>
+              ) : (
+                <Logo
+                  transparent
+                  width={40}
+                  height={40}
+                  className="w-max h-max"
+                />
+              )}
+            </SidebarMenuButton>
+            {state === "expanded" && <SidebarTrigger className="ml-auto" />}
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                  <SidebarMenuButton asChild tooltip={item.title}>
+                    <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -62,6 +82,9 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter className="border-t-2">
+        <NavSidebarUser />
+      </SidebarFooter>
     </Sidebar>
   );
 }

@@ -1,7 +1,7 @@
 import React from "react";
 
 const page = () => {
-  return <div>FIles Page</div>;
+  return <div>Vault Page</div>;
 };
 
 export default page;
