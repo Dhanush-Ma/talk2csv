@@ -97,9 +97,14 @@ export const columns = [
     id: "actions",
     header: () => {
       return (
-        <div className="w-max mx-auto">
-          <Settings2 size={14} />
-        </div>
+        <Button
+          variant="ghost"
+          className="flex size-8 text-muted-foreground data-[state=open]:bg-muted ml-auto"
+          size="icon"
+        >
+          <Settings2 />
+          <span className="sr-only">Actions</span>
+        </Button>
       );
     },
     cell: (info) => {
@@ -131,7 +136,7 @@ export const columns = [
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
-              className="flex size-8 text-muted-foreground data-[state=open]:bg-muted mx-auto"
+              className="flex size-8 text-muted-foreground data-[state=open]:bg-muted ml-auto"
               size="icon"
             >
               <MoreVerticalIcon />

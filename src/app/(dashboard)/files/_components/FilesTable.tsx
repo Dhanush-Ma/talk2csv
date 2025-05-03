@@ -99,7 +99,7 @@ const FilesTable = ({ files, fetchError }: FilesTableProps) => {
             </TableRow>
           ))}
         </TableHeader>
-        <TableBody className="bg-sidebar-primary-foreground/20">
+        <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow
