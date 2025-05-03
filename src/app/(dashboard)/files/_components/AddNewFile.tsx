@@ -13,6 +13,7 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -54,8 +55,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useSearchParams } from "next/navigation";
-
-type CSVRow = Record<string, string>;
+import { formatTableName, retrieveUniqueTableName } from "@/lib/utils";
+import InfoTooltip from "@/components/shared/InfoTooltip";
+import { CSVRow } from "@/types/common/utils.type";
 
 const AddNewFile = () => {
   const params = useSearchParams();
@@ -129,9 +131,22 @@ const AddNewFile = () => {
       data: { user },
     } = await client.auth.getUser();
 
-    execute({
-      ...data,
-      userId: user!.id!,
+    Papa.parse<CSVRow>(data.file, {
+      header: true,
+      skipEmptyLines: true,
+
+      complete: async (results: ParseResult<CSVRow>) => {
+        const headers = results.meta.fields || [];
+        const rows = results.data;
+
+        execute({
+          ...data,
+          userId: user!.id!,
+          tableName: retrieveUniqueTableName(formatTableName(data.name)),
+          headers: headers,
+          rows: rows,
+        });
+      },
     });
   };
 
@@ -142,6 +157,7 @@ const AddNewFile = () => {
         setOpen(o);
         form.reset();
         setTagValue("");
+        setPreviewData(null);
       }}
     >
       <DialogTrigger asChild>
@@ -157,7 +173,7 @@ const AddNewFile = () => {
             We&apos;ll automatically structure it into a searchable database.
           </DialogDescription>
         </DialogHeader>
-        <div className="py-4 px-6">
+        <div className="pt-4 px-6">
           <Form {...form}>
             <form className="space-y-6">
               <FormField
@@ -172,6 +188,20 @@ const AddNewFile = () => {
                         placeholder="eg. Digital Marketing Hires - 2022"
                       />
                     </FormControl>
+                    {field.value && (
+                      <FormDescription className="text-xs flex items-center gap-x-2">
+                        <p>
+                          Table name:{" "}
+                          <span className="text-muted-foreground italic">
+                            {formatTableName(field.value)}
+                          </span>
+                        </p>
+                        <InfoTooltip
+                          text="This is how your file will be named in the database."
+                          side="right"
+                        />
+                      </FormDescription>
+                    )}
                     <FormMessage />
                   </FormItem>
                 )}
@@ -257,7 +287,7 @@ const AddNewFile = () => {
                     <FormLabel>CSV File</FormLabel>
                     <FormControl>
                       {field.value ? (
-                        <div className="flex flex-col gap-y-2">
+                        <div className="flex flex-col">
                           <div className="flex items-center gap-x-2">
                             <FileSpreadsheet size={16} />
                             <p className="text-sm text-muted-foreground">
@@ -265,9 +295,11 @@ const AddNewFile = () => {
                             </p>
                             <Button
                               variant="outline"
+                              className="bg-destructive/80 text-white border-destructive hover:bg-destructive/90 hover:text-white text-xs h-6 px-3"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 field.onChange(null);
+                                setPreviewData(null);
                               }}
                             >
                               Remove file
@@ -277,38 +309,10 @@ const AddNewFile = () => {
                             <FormLabel>
                               Previewing Data to be Imported.
                             </FormLabel>
-                            <p className="text-sm text-muted-foreground mb-3">
+                            <p className="text-sm text-muted-foreground">
                               Below is a snapshot of the data, showing up to
                               first 20 rows.
                             </p>
-                            <div className="max-h-64 overflow-auto rounded-md border">
-                              <div className="w-full overflow-x-auto">
-                                <div className="min-w-fit">
-                                  <Table className="w-full">
-                                    <TableHeader className="bg-muted z-10">
-                                      <TableRow className="bg-muted hover:bg-muted">
-                                        {previewData?.headers.map((header) => (
-                                          <TableHead key={header}>
-                                            {header}
-                                          </TableHead>
-                                        ))}
-                                      </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                      {previewData?.rows.map((row, index) => (
-                                        <TableRow key={index}>
-                                          {row.map((cell, cellIndex) => (
-                                            <TableCell key={cellIndex}>
-                                              {cell}
-                                            </TableCell>
-                                          ))}
-                                        </TableRow>
-                                      ))}
-                                    </TableBody>
-                                  </Table>
-                                </div>
-                              </div>
-                            </div>
                           </div>
                         </div>
                       ) : (
@@ -332,6 +336,31 @@ const AddNewFile = () => {
             </form>
           </Form>
         </div>
+        {previewData && (
+          <div className="overflow-auto mx-6">
+            <Table
+              className="overflow-clip relative"
+              divClassName="max-h-40 h-40 overflow-y-auto rounded-md border"
+            >
+              <TableHeader>
+                <TableRow className="sticky top-0 bg-muted z-10 hover:bg-muted">
+                  {previewData.headers.map((header) => (
+                    <TableHead key={header}>{header}</TableHead>
+                  ))}
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {previewData.rows.map((row, index) => (
+                  <TableRow key={index}>
+                    {row.map((cell, cellIndex) => (
+                      <TableCell key={cellIndex}>{cell}</TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
         <DialogFooter>
           <Button
             type="submit"

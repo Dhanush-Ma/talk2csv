@@ -6,6 +6,7 @@ import { db } from "@/db";
 import { filesSchema } from "@/schema/files.schema";
 import { files } from "@/db/schema";
 import { revalidatePath } from "next/cache";
+import { generateCreateTableSQL } from "@/lib/utils";
 
 const fetchUserFilesSchema = z.object({
   userId: z.string(),
@@ -36,19 +37,52 @@ export const fetchUserFiles = actionClient
   });
 
 export const createUserFile = actionClient
-  .schema(filesSchema.extend({ userId: z.string() }))
+  .schema(
+    filesSchema.extend({
+      userId: z.string(),
+      tableName: z.string(),
+      headers: z.array(z.string()),
+      rows: z.any(),
+    })
+  )
   .outputSchema(actionOutputSchema)
   .action(async ({ parsedInput }) => {
     try {
-      const { name, tags, file, userId } = parsedInput;
+      const { name, tags, file, userId, tableName, headers, rows } =
+        parsedInput;
+      const newFile = await db.transaction(async (tx) => {
+        // Create new table with the table name
+        await tx.execute(generateCreateTableSQL(headers, tableName));
+        console.log("Table created successfully", tableName);
 
-      const newFile = await db.insert(files).values({
-        name: name,
-        tags: tags,
-        rows: file.size,
-        size: file.size,
-        tableName: file.name,
-        userId: userId,
+        // Insert the data into the new table
+        let insertSQL = `INSERT INTO "${tableName}" VALUES `;
+
+        for (const row of rows) {
+          const values = headers.map((header) => row[header]);
+          const escapedValues = values.map((value) =>
+            value === null ? "NULL" : `'${value}'`
+          );
+          insertSQL += `(${escapedValues.join(",")}),`;
+        }
+
+        // Remove the trailing comma
+        insertSQL = insertSQL.slice(0, -1);
+
+        await tx.execute(insertSQL);
+        console.log("Data inserted successfully");
+
+        const f = await tx.insert(files).values({
+          name: name,
+          tags: tags,
+          rows: rows.length,
+          size: file.size,
+          tableName: tableName,
+          userId: userId,
+        });
+        console.log("File inserted successfully", f);
+
+        return f;
       });
 
       revalidatePath("/files");

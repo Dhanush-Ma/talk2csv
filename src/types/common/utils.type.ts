@@ -3,3 +3,5 @@ export interface ServerActionResponse<T> {
   message: string;
   data: T | null;
 }
+
+export type CSVRow = Record<string, string>;
