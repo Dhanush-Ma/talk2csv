@@ -7,6 +7,7 @@ import { filesSchema } from "@/schema/files.schema";
 import { files } from "@/db/schema";
 import { revalidatePath } from "next/cache";
 import { generateCreateTableSQL } from "@/lib/utils";
+import { eq } from "drizzle-orm";
 
 const fetchUserFilesSchema = z.object({
   userId: z.string(),
@@ -93,6 +94,39 @@ export const createUserFile = actionClient
       };
     } catch (error) {
       console.log("Error creating user file:", error);
+      throw error;
+    }
+  });
+
+export const deleteUserFile = actionClient
+  .schema(
+    z.object({
+      fileId: z.string(),
+      tableName: z.string(),
+    })
+  )
+  .outputSchema(actionOutputSchema)
+  .action(async ({ parsedInput }) => {
+    try {
+      const { fileId, tableName } = parsedInput;
+
+      await db.transaction(async (tx) => {
+        // Create new table with the table name
+        await tx.execute(`DROP TABLE IF EXISTS "${tableName}";`);
+        console.log("Table deleted successfully", tableName);
+
+        await db.delete(files).where(eq(files.id, fileId));
+        console.log("File deleted successfully", fileId);
+      });
+
+      revalidatePath("/files");
+
+      return {
+        status: "success",
+        message: "File deleted successfully",
+      };
+    } catch (error) {
+      console.log("Error deleting user file:", error);
       throw error;
     }
   });
