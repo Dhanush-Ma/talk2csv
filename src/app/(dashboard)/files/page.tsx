@@ -5,8 +5,11 @@ import SearchFiles from "./_components/SearchFiles";
 import { Suspense } from "react";
 import FilesTableWrapper from "./_components/FilesTableWrapper";
 import LoadingTable from "@/components/shared/LoadingTable";
+import { SearchParams } from "@/lib/utils";
 
-const page = async () => {
+const page = async (props: { searchParams?: SearchParams }) => {
+  const searchParams = await props.searchParams;
+
   return (
     <div>
       <div className="content-padding-x content-padding-y border-b w-full flex items-center justify-between">
@@ -30,7 +33,9 @@ const page = async () => {
           </div>
         }
       >
-        <FilesTableWrapper />
+        <FilesTableWrapper
+          query={searchParams?.q ? (searchParams.q as string) : undefined}
+        />
       </Suspense>
     </div>
   );

@@ -3,7 +3,7 @@ import { fetchUserFiles } from "@/services/actions/files.actions";
 import React from "react";
 import FilesTable from "./FilesTable";
 
-const FilesTableWrapper = async () => {
+const FilesTableWrapper = async ({ query }: { query?: string }) => {
   const client = await createClient();
   const {
     data: { user: loggedInUser },
@@ -11,6 +11,7 @@ const FilesTableWrapper = async () => {
 
   const result = await fetchUserFiles({
     userId: loggedInUser!.id,
+    query: query,
   });
 
   return (

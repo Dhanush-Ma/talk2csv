@@ -29,3 +29,7 @@ export function generateCreateTableSQL(headers: string[], tableName: string) {
     ",\n  "
   )}\n);`;
 }
+
+export type SearchParams = Promise<{
+  [key: string]: string | string[] | undefined;
+}>;

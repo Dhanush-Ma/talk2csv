@@ -7,7 +7,7 @@ import { filesSchema } from "@/schema/files.schema";
 import { files } from "@/db/schema";
 import { revalidatePath } from "next/cache";
 import { generateCreateTableSQL } from "@/lib/utils";
-import { eq } from "drizzle-orm";
+import { and, desc, eq, ilike } from "drizzle-orm";
 
 const fetchUserFilesSchema = z.object({
   userId: z.string(),
@@ -17,16 +17,23 @@ const fetchUserFilesSchema = z.object({
 export const fetchUserFiles = actionClient
   .schema(fetchUserFilesSchema)
   .outputSchema(actionOutputSchema)
-  .action(async ({ parsedInput: { userId } }) => {
+  .action(async ({ parsedInput: { userId, query } }) => {
     try {
-      const files = await db.query.files.findMany({
-        where: (files, { eq }) => eq(files.userId, userId),
-        orderBy: (files, { desc }) => [desc(files.uploadedAt)],
-      });
+      const fetchedFiles = await db
+        .select()
+        .from(files)
+        .where(
+          and(
+            eq(files.userId, userId),
+            query ? ilike(files.name, query) : undefined
+            // query ? ilike(files.tags, `%${query}%`) : undefined
+          )
+        )
+        .orderBy(desc(files.uploadedAt));
 
       return {
         status: "success",
-        data: files,
+        data: fetchedFiles,
       };
     } catch (error) {
       console.log("Error fetching user files:", error);
