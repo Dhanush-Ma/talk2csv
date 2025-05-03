@@ -1,4 +1,6 @@
+import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
+import files from "./files";
 
 const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -15,6 +17,10 @@ const users = pgTable("users", {
     .defaultNow()
     .$onUpdate(() => new Date()),
 });
+
+export const usersRelations = relations(users, ({ many }) => ({
+  files: many(files),
+}));
 
 export default users;
 

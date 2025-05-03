@@ -3,11 +3,16 @@ export const FORM_MESSAGES = {
   INVALID_EMAIL: "Please enter a valid email address.",
   INVALID_PASSWORD: "Password must be at least 6 characters long.",
   INVALID_USERNAME: "Username is required.",
+  INVALID_FILE: "Please upload a valid CSV file.",
+  INVALID_FILE_TYPE: "Only CSV files are allowed.",
+  INVALID_FILE_SIZE: (size: number) => `File must be less than ${size}MB.`,
+  MAXIMUM_NO_OF_TAGS: "You can only add up to 3 tags.",
 };
 
 export const ERROR_MESSAGES = {
   ACCOUNT_CREATION_FAILED:
     "Something went wrong while creating the account. Please try again.",
+  GENERAL_ERROR: "Something went wrong. Please try again later.",
 };
 
 export const ONBOARDING = {

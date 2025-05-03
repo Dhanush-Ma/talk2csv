@@ -2,7 +2,7 @@
 
 import { Slot } from "@radix-ui/react-slot";
 import { VariantProps, cva } from "class-variance-authority";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { AlignJustify, ChevronLeft, ChevronRight } from "lucide-react";
 import * as React from "react";
 
 import { Button } from "@/components/ui/button";
@@ -274,6 +274,32 @@ function SidebarTrigger({
       {...props}
     >
       {state === "expanded" ? <ChevronLeft /> : <ChevronRight />}
+      <span className="sr-only">Toggle Sidebar</span>
+    </Button>
+  );
+}
+
+function SidebarTriggerMobile({
+  className,
+  onClick,
+  ...props
+}: React.ComponentProps<typeof Button>) {
+  const { toggleSidebar } = useSidebar();
+
+  return (
+    <Button
+      data-sidebar="trigger"
+      data-slot="sidebar-trigger"
+      variant="ghost"
+      size="icon"
+      className={cn("size-7 lg:hidden ", className)}
+      onClick={(event) => {
+        onClick?.(event);
+        toggleSidebar();
+      }}
+      {...props}
+    >
+      <AlignJustify size={24} />
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   );
@@ -722,5 +748,6 @@ export {
   SidebarRail,
   SidebarSeparator,
   SidebarTrigger,
+  SidebarTriggerMobile,
   useSidebar,
 };

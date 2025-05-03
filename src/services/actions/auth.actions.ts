@@ -34,7 +34,7 @@ export const login = actionClient
     }
 
     revalidatePath("/", "layout");
-    redirect(AppConfig.homeRoute);
+    redirect(AppConfig.DEFAULT_ROUTE);
   });
 
 export const signup = actionClient
@@ -67,7 +67,7 @@ export const signup = actionClient
     }
 
     revalidatePath("/", "layout");
-    redirect(AppConfig.homeRoute);
+    redirect(AppConfig.DEFAULT_ROUTE);
   });
 
 export const logout = actionClient.action(async () => {

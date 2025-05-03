@@ -20,7 +20,7 @@ const OnboardingPage = async () => {
 
   // User onboarding is completed
   if (user) {
-    redirect(AppConfig.homeRoute);
+    redirect(AppConfig.DEFAULT_ROUTE);
   }
 
   return <OnboardingForm loggedInUser={loggedInUser} />;

@@ -56,5 +56,5 @@ export const createUser = actionClient
       };
     }
 
-    redirect(AppConfig.homeRoute);
+    redirect(AppConfig.DEFAULT_ROUTE);
   });

@@ -63,7 +63,7 @@ export async function updateSession(request: NextRequest) {
       request.nextUrl.pathname == "/signup")
   ) {
     const url = request.nextUrl.clone();
-    url.pathname = AppConfig.homeRoute;
+    url.pathname = AppConfig.DEFAULT_ROUTE;
     return NextResponse.redirect(url);
   }
 

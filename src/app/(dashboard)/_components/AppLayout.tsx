@@ -20,7 +20,7 @@ const AppLayout = ({ user, children }: AppLayoutProps) => {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main>{children}</main>
+      <main className="w-full">{children}</main>
     </SidebarProvider>
   );
 };

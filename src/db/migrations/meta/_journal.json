@@ -8,6 +8,13 @@
       "when": 1745987724388,
       "tag": "0000_tired_tag",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1746175781976,
+      "tag": "0001_empty_tattoo",
+      "breakpoints": true
     }
   ]
 }

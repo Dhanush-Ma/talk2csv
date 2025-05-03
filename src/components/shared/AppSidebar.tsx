@@ -23,7 +23,7 @@ import { usePathname } from "next/navigation";
 const items = [
   {
     title: "Data Vault",
-    url: "/vault",
+    url: "/files",
     icon: Database,
   },
   {
@@ -39,7 +39,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="border-b-2">
+      <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem className="flex items-center justify-between">
             <SidebarMenuButton

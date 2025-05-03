@@ -4,6 +4,7 @@ import { AppConfig } from "@/lib/config";
 import { ThemeProvider } from "./theme-provider";
 import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,6 +38,7 @@ export default function RootLayout({
         >
           {children}
           <NextTopLoader color="#6366f1" showSpinner={false} />
+          <Toaster richColors />
         </body>
       </ThemeProvider>
     </html>
