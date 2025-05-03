@@ -21,6 +21,7 @@ export const fetchUserFiles = actionClient
     try {
       const files = await db.query.files.findMany({
         where: (files, { eq }) => eq(files.userId, userId),
+        orderBy: (files, { desc }) => [desc(files.uploadedAt)],
       });
 
       return {

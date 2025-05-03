@@ -24,7 +24,7 @@ const page = async () => {
       <Suspense
         fallback={
           <div className="content-margin-x">
-            <div className="border rounded-md min-h-[calc(100dvh-12rem)] overflow-auto">
+            <div className="border rounded-md min-h-[calc(100dvh-12rem)] max-h-[calc(100dvh-12rem)] overflow-auto">
               <LoadingTable />
             </div>
           </div>

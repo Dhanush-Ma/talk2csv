@@ -37,6 +37,18 @@ export const columns = [
   columnHelper.accessor("uploadedAt", {
     id: "uploadedAt",
     header: "Uploaded At",
+    cell: (info) => {
+      const date = new Date(info.getValue());
+      return (
+        <span>
+          {date.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </span>
+      );
+    },
   }),
 
   columnHelper.accessor("rows", {
@@ -45,14 +57,40 @@ export const columns = [
   }),
 
   columnHelper.accessor("size", {
-    id: "sizeMB",
-    header: "Size (MB)",
+    id: "size",
+    header: "Size",
+    cell: (info) => {
+      const sizeInBytes = info.getValue();
+      const sizeInMB = sizeInBytes / (1024 * 1024);
+      return (
+        <span>
+          {sizeInMB >= 1 ? `${sizeInMB.toFixed(2)} MB` : `${sizeInBytes} bytes`}
+        </span>
+      );
+    },
   }),
 
   columnHelper.accessor("tags", {
     id: "tags",
     header: "Tags",
-    cell: (info) => info.getValue().join(", "),
+    cell: (info) => {
+      const tags = info.getValue();
+      return (
+        <div className="flex flex-wrap gap-1">
+          {tags.map((tag) => (
+            <span
+              key={tag}
+              className="bg-muted px-2 py-1 rounded-full text-xs text-muted-foreground border"
+            >
+              {tag}
+            </span>
+          ))}
+          {tags.length === 0 && (
+            <span className="text-muted-foreground">-</span>
+          )}
+        </div>
+      );
+    },
   }),
 
   columnHelper.accessor("userId", {

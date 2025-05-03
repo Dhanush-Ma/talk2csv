@@ -28,6 +28,7 @@ import {
   Telescope,
 } from "lucide-react";
 import EmptyTableWrapper from "@/components/shared/EmptyTableWrapper";
+import { AppConfig } from "@/lib/config";
 
 export type TData = {
   id: string;
@@ -49,7 +50,7 @@ const FilesTable = ({ files, fetchError }: FilesTableProps) => {
   const { setFiles, setIsFilesFetched } = useFilesStore();
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: AppConfig.TABLE_PAGE_SIZE,
   });
   const table = useReactTable({
     data,
@@ -73,75 +74,72 @@ const FilesTable = ({ files, fetchError }: FilesTableProps) => {
 
   return (
     <div className="content-margin-x">
-      <div className="border rounded-md min-h-[calc(100dvh-12rem)] overflow-auto">
-        <Table>
-          <TableHeader className="bg-muted">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
+      <Table
+        className="overflow-clip relative"
+        divClassName="overflow-auto rounded-md border min-h-[calc(100dvh-12rem)] max-h-[calc(100dvh-12rem)] border rounded-md"
+      >
+        <TableHeader className="bg-muted">
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow
+              className="sticky top-0 bg-muted z-10 hover:bg-muted"
+              key={headerGroup.id}
+            >
+              {headerGroup.headers.map((header) => {
+                return (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                );
+              })}
+            </TableRow>
+          ))}
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => (
+              <TableRow
+                key={row.id}
+                data-state={row.getIsSelected() && "selected"}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
               </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : fetchError ? (
-              <EmptyTableWrapper colSpan={columns.length}>
-                <div className="flex items-center justify-center border w-max p-2 rounded-md border-yellow-300 bg-yellow-300/10">
-                  <AlertTriangle size={16} className="text-yellow-500" />
-                </div>
-                <p>{fetchError}</p>
-                <Button
-                  variant="outline"
-                  className="!hover:bg-transparent"
-                  onClick={() => {
-                    window.location.reload();
-                  }}
-                >
-                  Try Again
-                </Button>
-              </EmptyTableWrapper>
-            ) : (
-              <EmptyTableWrapper colSpan={columns.length}>
-                <Telescope
-                  size={64}
-                  className="text-primar"
-                  strokeWidth={0.5}
-                />
-                <p>
-                  Nothing here yet. Upload a CSV to create your first data
-                  conversation.
-                </p>
-              </EmptyTableWrapper>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+            ))
+          ) : fetchError ? (
+            <EmptyTableWrapper colSpan={columns.length}>
+              <div className="flex items-center justify-center border w-max p-2 rounded-md border-yellow-300 bg-yellow-300/10">
+                <AlertTriangle size={16} className="text-yellow-500" />
+              </div>
+              <p>{fetchError}</p>
+              <Button
+                variant="outline"
+                className="!hover:bg-transparent"
+                onClick={() => {
+                  window.location.reload();
+                }}
+              >
+                Try Again
+              </Button>
+            </EmptyTableWrapper>
+          ) : (
+            <EmptyTableWrapper colSpan={columns.length}>
+              <Telescope size={64} className="text-primar" strokeWidth={0.5} />
+              <p>
+                Nothing here yet. Upload a CSV to create your first data
+                conversation.
+              </p>
+            </EmptyTableWrapper>
+          )}
+        </TableBody>
+      </Table>
       <div className="content-padding-y flex justify-end">
         <div className="flex w-full items-center gap-8 lg:w-fit">
           <p className="text-sm">

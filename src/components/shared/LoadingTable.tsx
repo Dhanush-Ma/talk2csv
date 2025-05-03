@@ -24,7 +24,7 @@ const LoadingTable = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {Array.from({ length: 17 }, (_, index) => (
+        {Array.from({ length: 30 }, (_, index) => (
           <TableRow key={index}>
             {Array.from({ length: 5 }, (_, index) => (
               <TableHead key={index}>
