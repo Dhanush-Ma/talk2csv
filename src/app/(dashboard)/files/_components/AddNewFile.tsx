@@ -167,7 +167,7 @@ const AddNewFile = () => {
           Add new file
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-3xl max-w-3xl">
+      <DialogContent className="w-sm md:w-max">
         <DialogHeader>
           <DialogTitle>Upload a New File</DialogTitle>
           <DialogDescription>
@@ -322,7 +322,7 @@ const AddNewFile = () => {
                           className="border-2 border-dashed border-gray-300 rounded-md p-4 flex flex-col justify-center items-center h-48 gap-y-2"
                         >
                           <input {...getInputProps()} />
-                          <p className="text-sm italic w-sm text-center">
+                          <p className="text-sm italic md:w-sm text-center">
                             Drag and drop a CSV file here, or click to select a
                             CSV file. Max size: {AppConfig.MAX_FILE_SIZE_MB}MB
                           </p>
