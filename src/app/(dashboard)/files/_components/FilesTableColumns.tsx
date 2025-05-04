@@ -16,10 +16,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import ArchiveFile from "./ArchiveFile";
-import { toast } from "sonner";
-import { deleteUserFile } from "@/services/actions/files.actions";
-import { ERROR_MESSAGES } from "@/lib/constants";
-import { useAction } from "next-safe-action/hooks";
 
 const columnHelper = createColumnHelper<SelectUserFile>();
 
@@ -108,29 +104,6 @@ export const columns = [
       );
     },
     cell: (info) => {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      const { execute } = useAction(deleteUserFile, {
-        onExecute: () =>
-          toast.loading("Deleting file...", {
-            id: info.row.original.id,
-          }),
-        onSuccess: () =>
-          toast.success("File deleted successfully.", {
-            id: info.row.original.id,
-          }),
-        onError: () =>
-          toast.error(ERROR_MESSAGES.GENERAL_ERROR, {
-            id: info.row.original.id,
-          }),
-      });
-
-      const handleDelete = async () => {
-        execute({
-          fileId: info.row.original.id,
-          tableName: info.row.original.tableName,
-        });
-      };
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -158,7 +131,10 @@ export const columns = [
               </DropdownMenuItem>
             </Link>
             <DropdownMenuSeparator />
-            <ArchiveFile handleDelete={handleDelete} />
+            <ArchiveFile
+              fileId={info.row.original.id}
+              tableName={info.row.original.tableName}
+            />
           </DropdownMenuContent>
         </DropdownMenu>
       );

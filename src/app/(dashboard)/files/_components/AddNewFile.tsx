@@ -87,28 +87,29 @@ const AddNewFile = () => {
     maxSize: AppConfig.MAX_FILE_SIZE_MB * 1024 * 1024,
     multiple: false,
     onDrop: (acceptedFiles) => {
-      console.log("ok");
-      Papa.parse<CSVRow>(acceptedFiles[0], {
-        header: true,
-        skipEmptyLines: true,
-        preview: 20,
+      if (acceptedFiles.length !== 0) {
+        Papa.parse<CSVRow>(acceptedFiles[0], {
+          header: true,
+          skipEmptyLines: true,
+          preview: 20,
 
-        complete: (results: ParseResult<CSVRow>) => {
-          setPreviewData({
-            headers: results.meta.fields || [],
-            rows: results.data.map((row) =>
-              Object.values(row).map((value) => value.toString())
-            ),
-          });
-        },
-        error: (error) => {
-          console.error("Error parsing CSV:", error);
-        },
-      });
+          complete: (results: ParseResult<CSVRow>) => {
+            setPreviewData({
+              headers: results.meta.fields || [],
+              rows: results.data.map((row) =>
+                Object.values(row).map((value) => value.toString())
+              ),
+            });
+          },
+          error: (error) => {
+            console.error("Error parsing CSV:", error);
+          },
+        });
 
-      form.setValue("file", acceptedFiles[0], {
-        shouldValidate: true,
-      });
+        form.setValue("file", acceptedFiles[0], {
+          shouldValidate: true,
+        });
+      }
     },
     onDropRejected: () => {
       toast.error(

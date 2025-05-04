@@ -1,3 +1,5 @@
+"use client";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -8,24 +10,60 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { ERROR_MESSAGES } from "@/lib/constants";
+import { cn } from "@/lib/utils";
+import { deleteUserFile } from "@/services/actions/files.actions";
 import { Archive } from "lucide-react";
+import { useAction } from "next-safe-action/hooks";
+import { toast } from "sonner";
 
 type ArchiveFileProps = {
-  handleDelete: () => void;
+  fileId: string;
+  tableName: string;
+  children?: React.ReactNode;
 };
 
-export default function ArchiveFile({ handleDelete }: ArchiveFileProps) {
+export default function ArchiveFile({
+  fileId,
+  tableName,
+  children,
+}: ArchiveFileProps) {
+  const { execute } = useAction(deleteUserFile, {
+    onExecute: () =>
+      toast.loading("Deleting file...", {
+        id: fileId,
+      }),
+    onSuccess: () =>
+      toast.success("File deleted successfully.", {
+        id: fileId,
+      }),
+    onError: () =>
+      toast.error(ERROR_MESSAGES.GENERAL_ERROR, {
+        id: fileId,
+      }),
+  });
+
+  const handleDelete = async () => {
+    execute({
+      fileId: fileId,
+      tableName: tableName,
+    });
+  };
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <DropdownMenuItem
-          onSelect={(e) => e.preventDefault()}
-          className="bg-destructive/80 text-white hover:!text-white hover:!bg-destructive/90 focus:!bg-destructive/90 focus:!text-white data-[disabled]:bg-destructive/50 data-[disabled]:text-destructive-foreground"
-        >
-          <Archive className="text-white" />
-          Archive
-        </DropdownMenuItem>
+        {children ?? (
+          <div
+            onSelect={(e) => e.preventDefault()}
+            className={cn(
+              "focus:bg-accent focus:text-accent-foreground data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 dark:data-[variant=destructive]:focus:bg-destructive/20 data-[variant=destructive]:focus:text-destructive data-[variant=destructive]:*:[svg]:!text-destructive [&_svg:not([class*='text-'])]:text-muted-foreground relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+              "bg-destructive/80 text-white hover:!text-white hover:!bg-destructive/90 focus:!bg-destructive/90 focus:!text-white data-[disabled]:bg-destructive/50 data-[disabled]:text-destructive-foreground"
+            )}
+          >
+            <Archive className="text-white" />
+            Archive
+          </div>
+        )}
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

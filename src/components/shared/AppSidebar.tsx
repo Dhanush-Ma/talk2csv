@@ -18,6 +18,7 @@ import Logo from "./Logo";
 import NavSidebarUser from "./NavSidebarUser";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 
 // Menu items.
 const items = [
@@ -34,8 +35,19 @@ const items = [
 ];
 
 export function AppSidebar() {
-  const { state } = useSidebar();
+  const { state, setOpen } = useSidebar();
   const pathname = usePathname();
+
+  useEffect(() => {
+    const fileUUIDRegex = /^\/files\/f\/[a-f0-9\-]{36}$/i;
+    if (fileUUIDRegex.test(pathname)) {
+      setOpen(false);
+    } else {
+      setOpen(true);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
 
   return (
     <Sidebar collapsible="icon">

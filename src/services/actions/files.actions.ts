@@ -8,6 +8,7 @@ import { files } from "@/db/schema";
 import { revalidatePath } from "next/cache";
 import { generateCreateTableSQL } from "@/lib/utils";
 import { and, desc, eq, ilike } from "drizzle-orm";
+import { AppConfig } from "@/lib/config";
 
 const fetchUserFilesSchema = z.object({
   userId: z.string(),
@@ -45,6 +46,83 @@ export const fetchUserFiles = actionClient
     }
   });
 
+export const fetchUserFile = actionClient
+  .schema(
+    z.object({
+      fileId: z.string(),
+    })
+  )
+  .outputSchema(actionOutputSchema)
+  .action(async ({ parsedInput: { fileId } }) => {
+    try {
+      const fetchedFile = await db
+        .select()
+        .from(files)
+        .where(eq(files.id, fileId))
+        .limit(1);
+
+      if (fetchedFile.length === 0) {
+        return {
+          status: "error",
+          message: "File not found.",
+        };
+      }
+
+      return {
+        status: "success",
+        data: fetchedFile[0],
+      };
+    } catch (error) {
+      console.log("Error fetching user file:", error);
+      return {
+        status: "error",
+        message:
+          "An error occurred while fetching the user file. Try again later.",
+      };
+    }
+  });
+
+export const fetchFileData = actionClient
+  .schema(
+    z.object({
+      tableName: z.string(),
+      offset: z.number(),
+    })
+  )
+  .outputSchema(actionOutputSchema)
+  .action(async ({ parsedInput: { tableName, offset } }) => {
+    try {
+      const pgHeaders = await db.execute(
+        `SELECT column_name FROM information_schema.columns WHERE table_name = '${tableName}' AND table_schema = 'public'`
+      );
+      const headers = pgHeaders.map((h) => h["column_name"] as string);
+
+      const pgRows = await db.execute(
+        `SELECT * FROM "${tableName}" ORDER BY "${headers[0]}" LIMIT ${AppConfig.TABLE_PAGE_SIZE} OFFSET ${offset}`
+      );
+      const rows: string[][] = pgRows.map((row) =>
+        headers.map((header) => {
+          const value = row[header];
+          return value === null || value === undefined ? "" : String(value);
+        })
+      );
+
+      const noOfRows = await db.execute(`SELECT COUNT(*) FROM "${tableName}"`);
+
+      return {
+        status: "success",
+        data: {
+          rows,
+          headers,
+          rowsCount: noOfRows[0]["count"] as number,
+        },
+      };
+    } catch (error) {
+      console.log("Error fetching file data:", error);
+      throw error;
+    }
+  });
+
 export const createUserFile = actionClient
   .schema(
     filesSchema.extend({
@@ -60,23 +138,28 @@ export const createUserFile = actionClient
       const { name, tags, file, userId, tableName, headers, rows } =
         parsedInput;
       const newFile = await db.transaction(async (tx) => {
+        const validHeaders = headers.filter((header) => header);
+
         // Create new table with the table name
-        await tx.execute(generateCreateTableSQL(headers, tableName));
+        await tx.execute(generateCreateTableSQL(validHeaders, tableName));
         console.log("Table created successfully", tableName);
 
         // Insert the data into the new table
         let insertSQL = `INSERT INTO "${tableName}" VALUES `;
 
         for (const row of rows) {
-          const values = headers.map((header) => row[header]);
-          const escapedValues = values.map((value) =>
-            value === null ? "NULL" : `'${value}'`
-          );
+          const values = validHeaders.map((header) => row[header]);
+          const escapedValues = values.map((value) => {
+            if (value === null || value === undefined) return "NULL";
+            const escaped = String(value).replace(/'/g, "''");
+            return `'${escaped}'`;
+          });
           insertSQL += `(${escapedValues.join(",")}),`;
         }
 
         // Remove the trailing comma
         insertSQL = insertSQL.slice(0, -1);
+        console.log(insertSQL);
 
         await tx.execute(insertSQL);
         console.log("Data inserted successfully");
