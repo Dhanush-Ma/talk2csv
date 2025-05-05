@@ -39,12 +39,14 @@ export function AppSidebar() {
   const pathname = usePathname();
 
   useEffect(() => {
-    const fileUUIDRegex = /^\/files\/f\/[a-f0-9\-]{36}$/i;
-    if (fileUUIDRegex.test(pathname)) {
-      setOpen(false);
-    } else {
-      setOpen(true);
-    }
+    const regexes = [
+      /^\/files\/f\/[a-f0-9\-]{36}$/i,
+      /^\/chat$/i,
+      /^\/chat\/[a-f0-9\-]{36}$/i,
+    ];
+
+    const matchesAny = regexes.some((regex) => regex.test(pathname));
+    setOpen(!matchesAny);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
