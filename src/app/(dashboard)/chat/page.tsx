@@ -73,8 +73,8 @@ const NewChatPage = () => {
   };
 
   return (
-    <div className="py-10">
-      <div className="flex flex-col justify-center h-[80dvh]">
+    <div className="p">
+      <div className="flex flex-col justify-center h-[90dvh]">
         <div className="space-y-5 bg-gradient-to-t from-primary/20 to-primary/40 p-4 rounded-md shadow-lg">
           <div className="flex items-center gap-x-4">
             <Image

@@ -27,7 +27,7 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <SidebarProvider defaultOpen={isSidebarCollapsed}>
+    <SidebarProvider defaultOpen={!isSidebarCollapsed}>
       <AppLayout user={user}>{children}</AppLayout>
     </SidebarProvider>
   );

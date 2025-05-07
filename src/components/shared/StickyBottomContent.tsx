@@ -1,9 +1,9 @@
+import ChatInput from "@/app/(dashboard)/chat/_components/ChatInput";
 import { ReactNode } from "react";
 import { useStickToBottomContext } from "use-stick-to-bottom";
 
 export function StickyToBottomContent(props: {
   content: ReactNode;
-  footer?: ReactNode;
   className?: string;
   contentClassName?: string;
 }) {
@@ -18,7 +18,9 @@ export function StickyToBottomContent(props: {
         {props.content}
       </div>
 
-      {props.footer}
+      <div className="sticky bottom-0 flex flex-col items-center bg-background">
+        <ChatInput />
+      </div>
     </div>
   );
 }
