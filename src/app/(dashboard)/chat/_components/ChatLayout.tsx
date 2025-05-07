@@ -1,6 +1,8 @@
 "use client";
 
-import { StickToBottom, useStickToBottomContext } from "use-stick-to-bottom";
+import { StickyToBottomContent } from "@/components/shared/StickyBottomContent";
+import { cn } from "@/lib/utils";
+import { StickToBottom } from "use-stick-to-bottom";
 import ChatInput from "./ChatInput";
 
 type ChatLayoutProps = {
@@ -9,35 +11,19 @@ type ChatLayoutProps = {
 
 const ChatLayout = ({ children }: ChatLayoutProps) => {
   return (
-    <div className="relative w-full flex flex-col overflow-hidden">
-      <StickToBottom
-        className="mx-auto relative"
-        resize="smooth"
-        initial="smooth"
-      >
-        <StickToBottom.Content className="flex flex-col gap-4">
-          {children}
-        </StickToBottom.Content>
-
-        <ScrollToBottom />
-
-        <ChatInput />
-      </StickToBottom>
-    </div>
+    <StickToBottom className="relative flex-1 overflow-hidden">
+      <StickyToBottomContent
+        className={cn("absolute px-4 inset-0 overflow-y-scroll scrollbar")}
+        contentClassName="pt-8 pb-16 chat-size mx-auto flex flex-col gap-4 w-full"
+        content={children}
+        footer={
+          <div className="sticky bottom-0 flex flex-col items-center bg-background">
+            <ChatInput />
+          </div>
+        }
+      />
+    </StickToBottom>
   );
 };
 
 export default ChatLayout;
-
-function ScrollToBottom() {
-  const { isAtBottom, scrollToBottom } = useStickToBottomContext();
-
-  return (
-    !isAtBottom && (
-      <button
-        className="absolute i-ph-arrow-circle-down-fill text-4xl rounded-lg left-[50%] translate-x-[-50%] bottom-0"
-        onClick={() => scrollToBottom()}
-      />
-    )
-  );
-}

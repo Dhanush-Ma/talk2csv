@@ -1,6 +1,6 @@
 "use client";
 import { AppSidebar } from "@/components/shared/AppSidebar";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarInset } from "@/components/ui/sidebar";
 import { SelectUser } from "@/db/schema/user";
 import { useUserStore } from "@/store/user.store";
 import React from "react";
@@ -18,12 +18,12 @@ const AppLayout = ({ user, children }: AppLayoutProps) => {
   }, [user, setUser]);
 
   return (
-    <SidebarProvider>
+    <>
       <AppSidebar />
       <SidebarInset className="overflow-hidden">
         <main className="w-full">{children}</main>
       </SidebarInset>
-    </SidebarProvider>
+    </>
   );
 };
 

@@ -8,13 +8,9 @@ type ChatLayoutProps = {
 
 const layout = ({ children }: ChatLayoutProps) => {
   return (
-    <div className="flex gap-x-2">
+    <div className="flex h-dvh w-full overflow-hidden">
       <PreviousChats />
-      <ChatLayout>
-        <div className="h-dvh w-2xl max-w-2xl mx-auto ">{children}</div>
-      </ChatLayout>
-      {/* <main className="overflow-y-auto relative w-full max-w-full">
-      </main> */}
+      <ChatLayout>{children}</ChatLayout>
     </div>
   );
 };
