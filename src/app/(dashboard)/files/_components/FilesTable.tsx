@@ -131,7 +131,7 @@ const FilesTable = ({ files, fetchError }: FilesTableProps) => {
             </EmptyTableWrapper>
           ) : (
             <EmptyTableWrapper colSpan={columns.length}>
-              <Telescope size={64} className="text-primar" strokeWidth={0.5} />
+              <Telescope size={64} strokeWidth={0.5} />
               <p>
                 Nothing here yet. Upload a CSV to create your first data
                 conversation.

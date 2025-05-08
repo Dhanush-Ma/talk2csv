@@ -44,7 +44,7 @@ const NavSidebarUser = () => {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground hover:bg-sidebar-accent hover:text-black focus:outline-none"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground hover:bg-sidebar-accent focus:outline-none"
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>

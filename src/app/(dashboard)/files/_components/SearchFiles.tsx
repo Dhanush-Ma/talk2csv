@@ -36,14 +36,14 @@ const SearchFiles = () => {
 
   return (
     <div className="content-padding-x content-padding-y">
-      <div className="flex items-center justify-between gap-x-2 border rounded-md lg:max-w-sm h-9 overflow-hidden">
+      <div className="flex items-center justify-between  border rounded-md lg:max-w-sm h-9 overflow-hidden">
         <Search
           className="text-muted-foreground border-r h-full bg-muted px-2"
           size={36}
         />
         <Input
-          placeholder="Seach for files, tags..."
-          className="border-0 focus-visible:ring-0 focus-visible:outline-none shadow-none px-0"
+          placeholder="Search for files, tags..."
+          className="border-0 focus-visible:ring-0 focus-visible:outline-none shadow-none px-0 pl-2"
           onChange={handleSearch}
           value={query}
         />

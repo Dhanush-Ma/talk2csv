@@ -8,9 +8,9 @@ type EmptyTableWrapperProps = {
 
 const EmptyTableWrapper = ({ children, colSpan }: EmptyTableWrapperProps) => {
   return (
-    <TableRow className="bg-muted/10 hover:bg-transparent">
+    <TableRow className="bg-sidebar hover:bg-sidebar">
       <TableCell colSpan={colSpan}>
-        <div className="flex flex-col items-center justify-center gap-4 w-full h-[calc(100dvh-15.5rem)]">
+        <div className="flex flex-col items-center justify-center gap-4 w-full h-[calc(100dvh-15.7rem)]">
           {children}
         </div>
       </TableCell>

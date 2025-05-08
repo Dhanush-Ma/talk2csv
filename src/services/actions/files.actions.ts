@@ -211,6 +211,7 @@ export const deleteUserFile = actionClient
       });
 
       revalidatePath("/files");
+      revalidatePath("/chat", "layout");
 
       return {
         status: "success",

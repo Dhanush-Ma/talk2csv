@@ -13,6 +13,7 @@ import {
 import { ERROR_MESSAGES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { deleteUserFile } from "@/services/actions/files.actions";
+import { useQueryClient } from "@tanstack/react-query";
 import { Archive } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
@@ -28,15 +29,22 @@ export default function ArchiveFile({
   tableName,
   children,
 }: ArchiveFileProps) {
+  const queryClient = useQueryClient();
   const { execute } = useAction(deleteUserFile, {
     onExecute: () =>
       toast.loading("Deleting file...", {
         id: fileId,
       }),
-    onSuccess: () =>
+    onSuccess: () => {
       toast.success("File deleted successfully.", {
         id: fileId,
-      }),
+      });
+
+      // Invalidate the queries to refetch the chats
+      queryClient.invalidateQueries({
+        queryKey: ["chats"],
+      });
+    },
     onError: () =>
       toast.error(ERROR_MESSAGES.GENERAL_ERROR, {
         id: fileId,

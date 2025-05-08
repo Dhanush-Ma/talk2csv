@@ -55,17 +55,14 @@ const ChatThread = ({ chatId, initialMessages }: ChatThreadProps) => {
         }
       >
         <div className="space-y-8">
-          {messages.map((message) =>
+          {messages.map((message, idx) =>
             message.role === "user" ? (
               <ChatMessageUser key={message.id} message={message} />
             ) : message.role === "assistant" ? (
               <ChatMessageAI
                 key={message.id}
                 message={message}
-                loading={
-                  status === "submitted" &&
-                  message.id === messages[messages.length - 1].id
-                }
+                loading={status === "submitted" && idx === messages.length - 1}
               />
             ) : null
           )}
