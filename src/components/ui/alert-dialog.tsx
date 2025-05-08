@@ -127,7 +127,11 @@ function AlertDialogAction({
 }: React.ComponentProps<typeof AlertDialogPrimitive.Action>) {
   return (
     <AlertDialogPrimitive.Action
-      className={cn(buttonVariants(), className)}
+      className={cn(
+        buttonVariants(),
+        className,
+        "text-white hover:!text-white hover:!bg-destructive/90 focus:!bg-destructive/90 focus:!text-white bg-destructive"
+      )}
       {...props}
     />
   );

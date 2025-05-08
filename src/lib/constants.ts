@@ -13,6 +13,8 @@ export const ERROR_MESSAGES = {
   ACCOUNT_CREATION_FAILED:
     "Something went wrong while creating the account. Please try again.",
   GENERAL_ERROR: "Something went wrong. Please try again later.",
+  CHAT_CREATION_FAILED:
+    "Something went wrong while creating the chat. Please try again.",
 };
 
 export const ONBOARDING = {

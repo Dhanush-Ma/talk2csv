@@ -5,6 +5,7 @@ import { ThemeProvider } from "./theme-provider";
 import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
 import { Toaster } from "sonner";
+import QueryProvider from "./query-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,20 +28,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="light"
-        enableSystem
-        disableTransitionOnChange
-      >
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      <QueryProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
         >
-          {children}
-          <NextTopLoader color="#6366f1" showSpinner={false} />
-          <Toaster richColors />
-        </body>
-      </ThemeProvider>
+          <body
+            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          >
+            {children}
+            <NextTopLoader color="#6366f1" showSpinner={false} />
+            <Toaster richColors />
+          </body>
+        </ThemeProvider>
+      </QueryProvider>
     </html>
   );
 }

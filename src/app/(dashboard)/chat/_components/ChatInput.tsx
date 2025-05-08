@@ -21,20 +21,34 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useChat } from "@ai-sdk/react";
 import ScrollToBottom from "@/components/shared/ScrollToBottom";
+import { ChatRequestOptions } from "ai";
 
-const ChatInput = () => {
-  const { fileId, setModel, model } = useChatStore();
-  const { input, handleInputChange, handleSubmit } = useChat({
-    id: "123",
-    body: {
-      model: model,
+type ChatInputProps = {
+  chatId: string;
+  input: string;
+  handleInputChange: (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+  ) => void;
+  handleSubmit: (
+    event?: {
+      preventDefault?: () => void;
     },
-  });
+    chatRequestOptions?: ChatRequestOptions
+  ) => void;
+};
+
+const ChatInput = ({
+  input,
+  handleInputChange,
+  handleSubmit,
+}: ChatInputProps) => {
+  const { setModel, model } = useChatStore();
 
   return (
-    <div className="">
+    <div>
       <ScrollToBottom />
 
       <div className="bg-muted rounded-lg border overflow-hidden shadow-xl chat-size mx-auto mb-2">
@@ -85,12 +99,12 @@ const ChatInput = () => {
               </SelectContent>
             </Select>
           </div>
-          {input && fileId ? (
+          {input ? (
             <Button
               onClick={handleSubmit}
               className=""
               size="icon"
-              disabled={!input || !fileId}
+              disabled={!input}
             >
               <Send />
             </Button>
@@ -98,16 +112,12 @@ const ChatInput = () => {
             <TooltipProvider delayDuration={0}>
               <Tooltip>
                 <TooltipTrigger>
-                  <Button className="" size="icon" disabled={!input || !fileId}>
+                  <Button className="" size="icon" disabled={!input}>
                     <Send />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  {!input
-                    ? "Requires a text input"
-                    : !fileId
-                    ? "Please select a file before initiating a chat"
-                    : null}
+                  {!input ? "Requires a text input" : null}
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>

@@ -41,6 +41,7 @@ export function AppSidebar() {
   useEffect(() => {
     const regexes = [
       /^\/files\/f\/[a-f0-9\-]{36}$/i,
+      /^\/chat$/i,
       /^\/chat\/[a-f0-9\-]{36}$/i,
     ];
 

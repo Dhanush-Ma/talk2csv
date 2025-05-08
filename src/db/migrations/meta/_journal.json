@@ -15,6 +15,27 @@
       "when": 1746175781976,
       "tag": "0001_empty_tattoo",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1746607545124,
+      "tag": "0002_concerned_nightshade",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1746609655343,
+      "tag": "0003_first_living_tribunal",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1746613744553,
+      "tag": "0004_dizzy_skrulls",
+      "breakpoints": true
     }
   ]
 }
