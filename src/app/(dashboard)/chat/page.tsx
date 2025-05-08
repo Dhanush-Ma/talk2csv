@@ -93,7 +93,7 @@ const NewChatPage = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center h-screen w-full">
+    <div className="flex flex-col justify-center h-dvh mx-auto">
       <div className="space-y-5 bg-gradient-to-t from-primary/20 to-primary/40 p-4 rounded-md shadow-lg chat-size mx-auto">
         <div className="flex items-center gap-x-4">
           <Image

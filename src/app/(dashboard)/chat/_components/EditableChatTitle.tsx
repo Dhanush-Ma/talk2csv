@@ -54,12 +54,12 @@ const EditableChatTitle = ({
   };
 
   return (
-    <div className="px-3">
+    <div>
       <Input
         ref={inputRef}
         value={title}
         onChange={handleTitleChange}
-        className="m w-full"
+        className="w-full"
         onBlur={() => disableEdit()}
         onKeyDown={(e) => {
           if (e.key === "Enter") {

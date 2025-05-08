@@ -30,7 +30,13 @@ import { toast } from "sonner";
 import { ERROR_MESSAGES } from "@/lib/constants";
 import { useQueryClient } from "@tanstack/react-query";
 
-const ChatTitle = ({ chat }: { chat: Chat }) => {
+const ChatTitle = ({
+  chat,
+  isActive = false,
+}: {
+  chat: Chat;
+  isActive?: boolean;
+}) => {
   const queryClient = useQueryClient();
   const [title, setTitle] = useState(chat.title);
   const [showChatMenu, setShowChatMenu] = useState(false);
@@ -90,7 +96,12 @@ const ChatTitle = ({ chat }: { chat: Chat }) => {
     <Link
       key={chat.id}
       href={`/chat/${chat.id}`}
-      className="flex items-center justify-between px-3 rounded-md group relative"
+      className={cn(
+        "flex items-center justify-between px-3 py-2 rounded-md group hover:!bg-muted hover:!text-primary",
+        {
+          "text-primary bg-muted ": isActive,
+        }
+      )}
       onMouseEnter={() => handleChatMenuToggle(true)}
       onMouseLeave={() => handleChatMenuToggle(false)}
       onFocus={() => handleChatMenuToggle(true)}

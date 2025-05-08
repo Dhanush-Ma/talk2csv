@@ -7,8 +7,10 @@ import { useQuery } from "@tanstack/react-query";
 import { PlusCircle } from "lucide-react";
 import Link from "next/link";
 import ChatTitle from "./ChatTitle";
+import { useParams } from "next/navigation";
 
 const ChatHistory = () => {
+  const { chatId: currentChatId } = useParams<{ chatId: string }>();
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["chats"],
     queryFn: async () => {
@@ -18,7 +20,7 @@ const ChatHistory = () => {
   });
 
   return (
-    <div className="w-(--sidebar-width) border-r overflow-y-auto">
+    <div className="w-[20rem] border-r overflow-y-auto">
       <div className="border-b-2 py-4 px-4">
         <div>
           <div className="w-full font-semibold text-xl mb-2">Chat History</div>
@@ -30,7 +32,7 @@ const ChatHistory = () => {
           </Link>
         </div>
       </div>
-      <div className="flex flex-col gap-y-2 py-4">
+      <div className="py-4">
         {isLoading && (
           <div className="flex items-center justify-center">
             <Loader className="fill-primary" />
@@ -51,7 +53,15 @@ const ChatHistory = () => {
               <p className="text-muted-foreground">No chats found</p>
             </div>
           ) : (
-            data?.map((chat) => <ChatTitle key={chat.id} chat={chat} />)
+            <div className="mx-2 flex flex-col gap-y-2">
+              {data?.map((chat) => (
+                <ChatTitle
+                  key={chat.id}
+                  chat={chat}
+                  isActive={chat.id === currentChatId}
+                />
+              ))}
+            </div>
           )
         ) : null}
       </div>

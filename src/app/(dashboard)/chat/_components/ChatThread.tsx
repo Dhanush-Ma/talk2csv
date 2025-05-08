@@ -20,6 +20,7 @@ const ChatThread = ({ chatId, initialMessages }: ChatThreadProps) => {
     messages: messages,
     input,
     handleInputChange,
+    status,
     handleSubmit,
   } = useChat({
     id: chatId,
@@ -40,7 +41,7 @@ const ChatThread = ({ chatId, initialMessages }: ChatThreadProps) => {
     <StickToBottom className="relative flex-1 overflow-hidden">
       <StickyToBottomContent
         className={"absolute px-4 inset-0 overflow-y-scroll scrollbar"}
-        contentClassName="pt-8 pb-16 chat-size mx-auto flex flex-col gap-4 w-full  h-[90vh]"
+        contentClassName="pt-8 pb-16 chat-size mx-auto flex flex-col gap-4 w-full h-[90vh]"
         footer={
           <div className="sticky bottom-0 flex flex-col items-center bg-background">
             <ChatInput
@@ -52,13 +53,19 @@ const ChatThread = ({ chatId, initialMessages }: ChatThreadProps) => {
           </div>
         }
       >
-        {messages.map((message) =>
-          message.role === "user" ? (
-            <ChatMessageUser key={message.id} message={message} />
-          ) : message.role === "assistant" ? (
-            <ChatMessageAI key={message.id} message={message} />
-          ) : null
-        )}
+        <div className="space-y-8">
+          {messages.map((message) =>
+            message.role === "user" ? (
+              <ChatMessageUser key={message.id} message={message} />
+            ) : message.role === "assistant" ? (
+              <ChatMessageAI
+                key={message.id}
+                message={message}
+                loading={status === "submitted"}
+              />
+            ) : null
+          )}
+        </div>
       </StickyToBottomContent>
     </StickToBottom>
   );
