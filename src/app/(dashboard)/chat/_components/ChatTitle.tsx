@@ -3,7 +3,7 @@
 import { Chat } from "@/db/schema/chat";
 import { Archive, MoreHorizontal, PencilLine } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,15 +23,68 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { cn } from "@/lib/utils";
+import EditableChatTitle from "./EditableChatTitle";
+import { useAction } from "next-safe-action/hooks";
+import { deleteChat } from "@/services/actions/chat.actions";
+import { toast } from "sonner";
+import { ERROR_MESSAGES } from "@/lib/constants";
+import { useQueryClient } from "@tanstack/react-query";
 
 const ChatTitle = ({ chat }: { chat: Chat }) => {
-  const [showChatMenu, setShowChatMenu] = React.useState(false);
+  const queryClient = useQueryClient();
+  const [title, setTitle] = useState(chat.title);
+  const [showChatMenu, setShowChatMenu] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(false);
+  const [isChatTitleEditable, setIsChatTitleEditable] = useState(false);
+  const { execute } = useAction(deleteChat, {
+    onExecute: () => {
+      toast.loading("Deleting chat...", {
+        id: `delete-chat-${chat.id}`,
+      });
+    },
+    onSuccess: ({ data }) => {
+      if (data?.status === "success") {
+        toast.success("Chat deleted successfully", {
+          id: `delete-chat-${chat.id}`,
+        });
+      } else {
+        toast.error(ERROR_MESSAGES.CHAT_DELETION_FAILED, {
+          id: `delete-chat-${chat.id}`,
+        });
+      }
+      queryClient.invalidateQueries({
+        queryKey: ["chats"],
+      });
+    },
+    onError: () => {
+      toast.error(ERROR_MESSAGES.CHAT_DELETION_FAILED, {
+        id: `delete-chat-${chat.id}`,
+      });
+    },
+  });
 
   const handleChatMenuToggle = (bool: boolean) => {
     setShowChatMenu(bool);
   };
 
-  const handleDeleteChat = async () => {};
+  const handleDeleteChat = async () => {
+    execute({
+      chatId: chat.id,
+    });
+  };
+
+  if (isChatTitleEditable) {
+    return (
+      <EditableChatTitle
+        chat={chat}
+        title={title}
+        setTitle={setTitle}
+        disableEdit={() => {
+          setIsChatTitleEditable(false);
+        }}
+      />
+    );
+  }
 
   return (
     <Link
@@ -43,8 +96,8 @@ const ChatTitle = ({ chat }: { chat: Chat }) => {
       onFocus={() => handleChatMenuToggle(true)}
       onBlur={() => handleChatMenuToggle(false)}
     >
-      <span className="truncate text-sm"> {chat.title}</span>
-      <DropdownMenu>
+      <span className="truncate text-sm"> {title}</span>
+      <DropdownMenu open={openDropdown} onOpenChange={setOpenDropdown}>
         <DropdownMenuTrigger asChild>
           {showChatMenu && (
             <Button
@@ -58,12 +111,23 @@ const ChatTitle = ({ chat }: { chat: Chat }) => {
           )}
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" side="right" className="w-32 group">
-          <DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => {
+              setIsChatTitleEditable(true);
+              setOpenDropdown(false);
+            }}
+          >
             <PencilLine className="group-hover:text-primary" />
             Rename
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <AlertDialog>
+          <AlertDialog
+            onOpenChange={(open) => {
+              if (!open) {
+                setOpenDropdown(false);
+              }
+            }}
+          >
             <AlertDialogTrigger asChild>
               <div
                 onSelect={(e) => e.preventDefault()}

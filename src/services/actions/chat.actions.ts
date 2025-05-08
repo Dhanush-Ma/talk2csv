@@ -10,6 +10,7 @@ import { z } from "zod";
 import message from "@/db/schema/message";
 import { files } from "@/db/schema";
 import { generateTalk2CSVSystemPrompt } from "@/lib/chat.config";
+import { revalidatePath } from "next/cache";
 
 export const fetchUserChats = actionClient
   .outputSchema(actionOutputSchema)
@@ -165,6 +166,85 @@ export const createNewChat = actionClient
         status: "error",
         message:
           "An error occurred while creating a new chat. Try again later.",
+      };
+    }
+  });
+
+export const deleteChat = actionClient
+  .schema(z.object({ chatId: z.string() }))
+  .outputSchema(actionOutputSchema)
+  .action(async ({ parsedInput: { chatId } }) => {
+    try {
+      const client = await createClient();
+      const {
+        data: { user },
+      } = await client.auth.getUser();
+
+      if (!user) throw new Error("User not found.");
+
+      const deletedChat = await db
+        .delete(chats)
+        .where(and(eq(chats.userId, user.id), eq(chats.id, chatId)))
+        .returning({ deletedChatId: chats.id });
+
+      if (!deletedChat.length) {
+        return {
+          status: "error",
+          message:
+            "The chat requested does not exist or the user does not have permissions to the chat.",
+        };
+      }
+
+      revalidatePath(`/chat/${chatId}`);
+
+      return {
+        status: "success",
+        data: deletedChat,
+      };
+    } catch (error) {
+      console.log("Error deleting chat:", error);
+      return {
+        status: "error",
+        message: "An error occurred while deleting the chat. Try again later.",
+      };
+    }
+  });
+
+export const renameChat = actionClient
+  .schema(z.object({ chatId: z.string(), title: z.string() }))
+  .outputSchema(actionOutputSchema)
+  .action(async ({ parsedInput: { chatId, title } }) => {
+    try {
+      const client = await createClient();
+      const {
+        data: { user },
+      } = await client.auth.getUser();
+
+      if (!user) throw new Error("User not found.");
+
+      const renamedChat = await db
+        .update(chats)
+        .set({ title })
+        .where(and(eq(chats.userId, user.id), eq(chats.id, chatId)))
+        .returning({ renamedChatId: chats.id });
+
+      if (!renamedChat.length) {
+        return {
+          status: "error",
+          message:
+            "The chat requested does not exist or the user does not have permissions to the chat.",
+        };
+      }
+
+      return {
+        status: "success",
+        data: renamedChat,
+      };
+    } catch (error) {
+      console.log("Error renaming chat:", error);
+      return {
+        status: "error",
+        message: "An error occurred while renaming the chat. Try again later.",
       };
     }
   });

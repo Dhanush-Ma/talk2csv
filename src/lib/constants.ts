@@ -15,6 +15,10 @@ export const ERROR_MESSAGES = {
   GENERAL_ERROR: "Something went wrong. Please try again later.",
   CHAT_CREATION_FAILED:
     "Something went wrong while creating the chat. Please try again.",
+  CHAT_DELETION_FAILED:
+    "Something went wrong while deleting the chat. Please try again.",
+  CHAT_RENAME_FAILED:
+    "Something went wrong while renaming the chat. Please try again.",
 };
 
 export const ONBOARDING = {
