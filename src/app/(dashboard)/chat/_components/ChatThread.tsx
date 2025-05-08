@@ -40,8 +40,8 @@ const ChatThread = ({ chatId, initialMessages }: ChatThreadProps) => {
   return (
     <StickToBottom className="relative flex-1 overflow-hidden">
       <StickyToBottomContent
-        className={"absolute px-4 inset-0 overflow-y-scroll scrollbar"}
-        contentClassName="pt-8 pb-16 chat-size mx-auto flex flex-col gap-4 w-full h-[90vh]"
+        className={"absolute px-4 inset-0 overflow-y-scroll scrollbar "}
+        contentClassName="pt-8 pb-16 chat-size mx-auto flex flex-col gap-4 w-full min-h-[89.5dvh]"
         footer={
           <div className="sticky bottom-0 flex flex-col items-center bg-background">
             <ChatInput
@@ -49,6 +49,7 @@ const ChatThread = ({ chatId, initialMessages }: ChatThreadProps) => {
               input={input}
               handleInputChange={handleInputChange}
               handleSubmit={handleSubmit}
+              disabled={status !== "ready"}
             />
           </div>
         }
@@ -61,7 +62,10 @@ const ChatThread = ({ chatId, initialMessages }: ChatThreadProps) => {
               <ChatMessageAI
                 key={message.id}
                 message={message}
-                loading={status === "submitted"}
+                loading={
+                  status === "submitted" &&
+                  message.id === messages[messages.length - 1].id
+                }
               />
             ) : null
           )}

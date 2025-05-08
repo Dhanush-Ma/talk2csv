@@ -27,6 +27,7 @@ import { ChatRequestOptions } from "ai";
 type ChatInputProps = {
   chatId: string;
   input: string;
+  disabled?: boolean;
   handleInputChange: (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -44,6 +45,7 @@ const ChatInput = ({
   input,
   handleInputChange,
   handleSubmit,
+  disabled = false,
 }: ChatInputProps) => {
   const { setModel, model } = useChatStore();
 
@@ -51,11 +53,11 @@ const ChatInput = ({
     <div>
       <ScrollToBottom />
 
-      <div className="bg-muted rounded-lg border overflow-hidden shadow-xl chat-size mx-auto mb-2">
+      <div className="bg-muted rounded-lg border overflow-hidden  chat-size mx-auto mb-2">
         <textarea
           value={input}
           onKeyDown={(e) => {
-            if (e.key === "Enter") {
+            if (e.key === "Enter" && !disabled) {
               handleSubmit();
               e.preventDefault();
             }
@@ -104,7 +106,7 @@ const ChatInput = ({
               onClick={handleSubmit}
               className=""
               size="icon"
-              disabled={!input}
+              disabled={disabled || !input}
             >
               <Send />
             </Button>
