@@ -15,7 +15,11 @@ const ChatPage = async ({
   }
 
   return (
-    <ChatThread chatId={chatId} initialMessages={response.data.data.messages} />
+    <ChatThread
+      chatId={chatId}
+      initialMessages={response.data.data.messages}
+      file={response.data.data.file}
+    />
   );
 };
 

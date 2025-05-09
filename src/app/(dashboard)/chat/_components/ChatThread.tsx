@@ -9,19 +9,25 @@ import { StickyToBottomContent } from "@/components/shared/StickyBottomContent";
 import ChatInput from "./ChatInput";
 import ChatMessageUser from "./ChatMessageUser";
 import ChatMessageAI from "./ChatMessageAI";
+import { SelectUserFile } from "@/db/schema/files";
+import { ExternalLink } from "lucide-react";
+import Link from "next/link";
+import ChatSuggestions from "./ChatSuggestions";
 
 type ChatThreadProps = {
   chatId: string;
   initialMessages: Message[];
+  file: SelectUserFile;
 };
 
-const ChatThread = ({ chatId, initialMessages }: ChatThreadProps) => {
+const ChatThread = ({ chatId, initialMessages, file }: ChatThreadProps) => {
   const {
     messages: messages,
     input,
     handleInputChange,
     status,
     handleSubmit,
+    append,
   } = useChat({
     id: chatId,
     body: {
@@ -56,6 +62,31 @@ const ChatThread = ({ chatId, initialMessages }: ChatThreadProps) => {
         }
       >
         <div className="space-y-8">
+          <ChatMessageAI>
+            <div>
+              <p>
+                <span className="flex items-center gap-1">
+                  Now exploring data from{" "}
+                  <Link
+                    href={`/files/f/${file.id}`}
+                    className="flex items-center gap-1"
+                  >
+                    <span className="text-primary underline">{file.name}.</span>
+                    <ExternalLink size={16} className="text-primary" />
+                  </Link>
+                </span>{" "}
+                I&apos;m ready to help you explore and answer questions based on
+                this data. Ask anything from summaries to deep insights!
+              </p>
+              {messages.length === 1 && (
+                <ChatSuggestions
+                  append={append}
+                  className="mt-4"
+                  chatId={chatId}
+                />
+              )}
+            </div>
+          </ChatMessageAI>
           {messages.map((message, idx) =>
             message.role === "user" ? (
               <ChatMessageUser key={message.id} message={message} />

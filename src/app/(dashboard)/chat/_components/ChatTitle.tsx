@@ -29,6 +29,7 @@ import { deleteChat } from "@/services/actions/chat.actions";
 import { toast } from "sonner";
 import { ERROR_MESSAGES } from "@/lib/constants";
 import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 const ChatTitle = ({
   chat,
@@ -38,6 +39,7 @@ const ChatTitle = ({
   isActive?: boolean;
 }) => {
   const queryClient = useQueryClient();
+  const router = useRouter();
   const [title, setTitle] = useState(chat.title);
   const [showChatMenu, setShowChatMenu] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(false);
@@ -61,6 +63,8 @@ const ChatTitle = ({
       queryClient.invalidateQueries({
         queryKey: ["chats"],
       });
+
+      router.push("/chat");
     },
     onError: () => {
       toast.error(ERROR_MESSAGES.CHAT_DELETION_FAILED, {
@@ -97,9 +101,9 @@ const ChatTitle = ({
       key={chat.id}
       href={`/chat/${chat.id}`}
       className={cn(
-        "flex items-center justify-between px-3 py-2 rounded-md group hover:!bg-muted hover:!text-primary",
+        "flex items-center justify-between px-3 py-2 rounded-md  hover:!bg-primary/20 hover:!text-primary",
         {
-          "text-primary bg-muted ": isActive,
+          "text-primary bg-primary/20": isActive,
         }
       )}
       onMouseEnter={() => handleChatMenuToggle(true)}
@@ -121,12 +125,13 @@ const ChatTitle = ({
             </Button>
           )}
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" side="right" className="w-32 group">
+        <DropdownMenuContent align="start" side="right" className="w-32">
           <DropdownMenuItem
             onClick={() => {
               setIsChatTitleEditable(true);
               setOpenDropdown(false);
             }}
+            className="group"
           >
             <PencilLine className="group-hover:text-primary" />
             Rename

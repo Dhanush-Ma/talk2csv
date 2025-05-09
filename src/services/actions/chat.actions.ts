@@ -72,16 +72,25 @@ export const fetchChatMessages = actionClient
         };
       }
 
-      const chatMessages = await db
-        .select()
-        .from(message)
-        .where(eq(message.chatId, chatId))
-        .orderBy(asc(message.createdAt));
+      const [chatMessages, file] = await Promise.all([
+        await db
+          .select()
+          .from(message)
+          .where(eq(message.chatId, chatId))
+          .orderBy(asc(message.createdAt)),
+
+        await db
+          .select()
+          .from(files)
+          .where(eq(files.id, chat[0].fileId!))
+          .limit(1),
+      ]);
 
       return {
         status: "success",
         data: {
           chat: chat[0],
+          file: file[0],
           messages: chatMessages,
         },
       };

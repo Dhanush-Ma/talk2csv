@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -16,6 +17,12 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import ArchiveFile from "./ArchiveFile";
+import { useAction } from "next-safe-action/hooks";
+import { createNewChat } from "@/services/actions/chat.actions";
+import { ERROR_MESSAGES } from "@/lib/constants";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 const columnHelper = createColumnHelper<SelectUserFile>();
 
@@ -104,6 +111,32 @@ export const columns = [
       );
     },
     cell: (info) => {
+      const router = useRouter();
+      const client = useQueryClient();
+      const { execute } = useAction(createNewChat, {
+        onError: () => {
+          toast.error(ERROR_MESSAGES.CHAT_CREATION_FAILED, {
+            id: "create-chat",
+          });
+        },
+        onExecute: () => {
+          toast.loading("Creating new chat...", {
+            id: "create-chat",
+          });
+        },
+        onSuccess: ({ data }) => {
+          toast.dismiss("create-chat");
+          if (data?.status === "success") {
+            router.push(`/chat/${data.data.chatId}`);
+            client.invalidateQueries({
+              queryKey: ["chats"],
+            });
+          } else {
+            toast.error(ERROR_MESSAGES.CHAT_CREATION_FAILED);
+          }
+        },
+      });
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -124,12 +157,17 @@ export const columns = [
               </DropdownMenuItem>
             </Link>
             <DropdownMenuSeparator />
-            <Link href={`/chat/c?fileId=${info.row.original.id}`}>
-              <DropdownMenuItem className="hover:!text-foreground">
-                <MessageSquareShare />
-                New chat
-              </DropdownMenuItem>
-            </Link>
+            <DropdownMenuItem
+              className="hover:!text-foreground"
+              onClick={() => {
+                execute({
+                  fileId: info.row.original.id,
+                });
+              }}
+            >
+              <MessageSquareShare />
+              New chat
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <ArchiveFile
               fileId={info.row.original.id}
