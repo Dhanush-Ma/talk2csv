@@ -55,7 +55,6 @@ const OnboardingForm = ({ loggedInUser }: OnboardingFormProps) => {
     },
   });
 
-  console.log(result);
   return (
     <AuthUiWrapper disableCopyright>
       <div className="flex flex-col items-center justify-center">

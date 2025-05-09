@@ -12,7 +12,6 @@ const ChatMessageAI = ({
   message: UIMessage;
   loading: boolean;
 }) => {
-  console.log("ChatMessageAI", message);
   return (
     <div className="flex items-start gap-4 ">
       <div className="h-8 w-8 rounded-full border-2 border-primary overflow-hidden shrink-0">

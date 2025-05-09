@@ -142,7 +142,6 @@ export const createUserFile = actionClient
 
         // Create new table with the table name
         await tx.execute(generateCreateTableSQL(validHeaders, tableName));
-        console.log("Table created successfully", tableName);
 
         // Insert the data into the new table
         let insertSQL = `INSERT INTO "${tableName}" VALUES `;
@@ -159,10 +158,8 @@ export const createUserFile = actionClient
 
         // Remove the trailing comma
         insertSQL = insertSQL.slice(0, -1);
-        console.log(insertSQL);
 
         await tx.execute(insertSQL);
-        console.log("Data inserted successfully");
 
         const f = await tx.insert(files).values({
           name: name,
@@ -204,10 +201,8 @@ export const deleteUserFile = actionClient
       await db.transaction(async (tx) => {
         // Create new table with the table name
         await tx.execute(`DROP TABLE IF EXISTS "${tableName}";`);
-        console.log("Table deleted successfully", tableName);
 
         await db.delete(files).where(eq(files.id, fileId));
-        console.log("File deleted successfully", fileId);
       });
 
       revalidatePath("/files");
