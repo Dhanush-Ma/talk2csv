@@ -139,11 +139,13 @@ const AddNewFile = () => {
       complete: async (results: ParseResult<CSVRow>) => {
         const headers = results.meta.fields || [];
         const rows = results.data;
+        const tableName = retrieveUniqueTableName(formatTableName(data.name));
+        console.log("tableName", tableName);
 
         execute({
           ...data,
           userId: user!.id!,
-          tableName: retrieveUniqueTableName(formatTableName(data.name)),
+          tableName,
           headers: headers,
           rows: rows,
         });

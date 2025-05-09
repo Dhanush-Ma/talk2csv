@@ -1,3 +1,5 @@
+import { JSX, SVGProps } from "react";
+
 export interface ServerActionResponse<T> {
   status: "success" | "error";
   message: string;
@@ -5,3 +7,11 @@ export interface ServerActionResponse<T> {
 }
 
 export type CSVRow = Record<string, string>;
+
+export type ChatModel = {
+  icon: (props: SVGProps<SVGSVGElement>) => JSX.Element;
+  name: string;
+  id: string;
+  provider: string;
+  disabled: boolean;
+};

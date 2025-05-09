@@ -47,7 +47,7 @@ const ChatHistory = () => {
           </div>
         )}
 
-        {data ? (
+        {!isError && data ? (
           data.length === 0 ? (
             <div className="flex items-center justify-center">
               <p className="text-muted-foreground">No chats found</p>

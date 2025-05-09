@@ -47,17 +47,17 @@ const ChatTitle = ({
   const { execute } = useAction(deleteChat, {
     onExecute: () => {
       toast.loading("Deleting chat...", {
-        id: `delete-chat-${chat.id}`,
+        id: `delete-chat`,
       });
     },
     onSuccess: ({ data }) => {
       if (data?.status === "success") {
         toast.success("Chat deleted successfully", {
-          id: `delete-chat-${chat.id}`,
+          id: `delete-chat`,
         });
       } else {
         toast.error(ERROR_MESSAGES.CHAT_DELETION_FAILED, {
-          id: `delete-chat-${chat.id}`,
+          id: `delete-chat`,
         });
       }
       queryClient.invalidateQueries({

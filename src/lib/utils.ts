@@ -15,9 +15,9 @@ export function formatTableName(name: string) {
 }
 
 export function retrieveUniqueTableName(name: string): string {
-  const shortuuid = short.generate();
+  const shortuuid = short().generate().slice(0, 10);
 
-  return `${name}_${shortuuid}`;
+  return `${name.slice(0, 10)}_${shortuuid}`;
 }
 
 export function generateCreateTableSQL(headers: string[], tableName: string) {

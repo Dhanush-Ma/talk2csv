@@ -181,7 +181,7 @@ export const createNewChat = actionClient
 
         // Fetch schema for the table using raw SQL
         const schemaResult = await db.execute(
-          `SELECT column_name FROM information_schema.columns WHERE table_name = '${file.tableName}' AND table_schema = 'public'`
+          `SELECT column_name, data_type FROM information_schema.columns WHERE table_name = '${file.tableName}' AND table_schema = 'public'`
         );
 
         // Format schema as an array of { column_name, data_type }

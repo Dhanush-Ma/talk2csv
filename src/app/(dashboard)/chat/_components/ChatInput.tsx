@@ -12,8 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CHAT_MODELS } from "@/lib/chat.config";
-import Image from "next/image";
+import { CHAT_MODELS, DEFAULT_CHAT_MODEL } from "@/lib/chat.config";
 import { useChatStore } from "@/store/chat.store";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import {
@@ -24,6 +23,7 @@ import {
 import ScrollToBottom from "@/components/shared/ScrollToBottom";
 import { ChatRequestOptions } from "ai";
 import { saveChatMessage } from "@/services/actions/chat.actions";
+import { useTheme } from "next-themes";
 
 type ChatInputProps = {
   chatId: string;
@@ -49,6 +49,7 @@ const ChatInput = ({
   disabled = false,
   chatId,
 }: ChatInputProps) => {
+  const { theme } = useTheme();
   const { setModel, model } = useChatStore();
 
   const handleChatRequestSubmit = () => {
@@ -83,9 +84,10 @@ const ChatInput = ({
         <div className="pb-4 pt-2 flex justify-between items-center px-4">
           <div>
             <Select
-              value={model}
+              value={model.id}
               onValueChange={(value) => {
-                setModel(value);
+                const selectedModel = CHAT_MODELS.find((m) => m.id === value);
+                setModel(selectedModel || DEFAULT_CHAT_MODEL);
               }}
             >
               <SelectTrigger className="max-w-[200px]">
@@ -101,11 +103,14 @@ const ChatInput = ({
                         value={model.id}
                         disabled={model.disabled}
                       >
-                        <Image
-                          src={model.icon}
-                          alt={model.name}
-                          width={20}
-                          height={20}
+                        <model.icon
+                          fill={
+                            model.provider === "OpenAI"
+                              ? theme === "dark"
+                                ? "#fff"
+                                : "#000"
+                              : undefined
+                          }
                         />
                         {model.name}
                       </SelectItem>

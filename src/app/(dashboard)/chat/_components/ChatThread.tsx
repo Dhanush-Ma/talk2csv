@@ -1,6 +1,5 @@
 "use client";
 
-import { DEFAULT_CHAT_MODEL } from "@/lib/chat.config";
 import React from "react";
 import { useChat } from "@ai-sdk/react";
 import { Message } from "@/db/schema/message";
@@ -13,6 +12,8 @@ import { SelectUserFile } from "@/db/schema/files";
 import { ExternalLink } from "lucide-react";
 import Link from "next/link";
 import ChatSuggestions from "./ChatSuggestions";
+import { useChatStore } from "@/store/chat.store";
+import { ERROR_MESSAGES } from "@/lib/constants";
 
 type ChatThreadProps = {
   chatId: string;
@@ -21,6 +22,7 @@ type ChatThreadProps = {
 };
 
 const ChatThread = ({ chatId, initialMessages, file }: ChatThreadProps) => {
+  const { model } = useChatStore();
   const {
     messages: messages,
     input,
@@ -28,14 +30,18 @@ const ChatThread = ({ chatId, initialMessages, file }: ChatThreadProps) => {
     status,
     handleSubmit,
     append,
+    error,
   } = useChat({
     id: chatId,
     body: {
-      model: DEFAULT_CHAT_MODEL.id,
+      model: {
+        id: model.id,
+        provider: model.provider,
+      },
       chatId: chatId,
     },
     sendExtraMessageFields: true,
-
+    maxSteps: 2,
     initialMessages: initialMessages.map((m) => ({
       id: m.id,
       role: m.role,
@@ -44,11 +50,15 @@ const ChatThread = ({ chatId, initialMessages, file }: ChatThreadProps) => {
     })),
   });
 
+  if (error) {
+    console.log(error.message);
+  }
+
   return (
     <StickToBottom className="relative flex-1 overflow-hidden">
       <StickyToBottomContent
         className={"absolute px-4 inset-0 overflow-y-scroll scrollbar "}
-        contentClassName="pt-8 pb-16 chat-size mx-auto flex flex-col gap-4 w-full min-h-[89.5dvh]"
+        contentClassName="pt-8 pb-16 chat-size mx-auto flex flex-col gap-4 max-w-full min-h-[89.5dvh]"
         footer={
           <div className="sticky bottom-0 flex flex-col items-center bg-background">
             <ChatInput
@@ -97,6 +107,13 @@ const ChatThread = ({ chatId, initialMessages, file }: ChatThreadProps) => {
                 loading={status === "submitted" && idx === messages.length - 1}
               />
             ) : null
+          )}
+          {error && (
+            <ChatMessageAI>
+              <div className="px-3 py-2 border border-destructive bg-destructive/30 text-destructive w-max rounded-md">
+                <p>{ERROR_MESSAGES.GENERAL_ERROR}</p>
+              </div>
+            </ChatMessageAI>
           )}
         </div>
       </StickyToBottomContent>
