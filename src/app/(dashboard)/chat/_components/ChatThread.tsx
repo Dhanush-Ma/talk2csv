@@ -26,6 +26,7 @@ const ChatThread = ({ chatId, initialMessages }: ChatThreadProps) => {
     id: chatId,
     body: {
       model: DEFAULT_CHAT_MODEL.id,
+      chatId: chatId,
     },
     sendExtraMessageFields: true,
 

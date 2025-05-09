@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/tooltip";
 import ScrollToBottom from "@/components/shared/ScrollToBottom";
 import { ChatRequestOptions } from "ai";
+import { saveChatMessage } from "@/services/actions/chat.actions";
 
 type ChatInputProps = {
   chatId: string;
@@ -46,8 +47,21 @@ const ChatInput = ({
   handleInputChange,
   handleSubmit,
   disabled = false,
+  chatId,
 }: ChatInputProps) => {
   const { setModel, model } = useChatStore();
+
+  const handleChatRequestSubmit = () => {
+    if (!input || disabled) return;
+
+    saveChatMessage({
+      chatId,
+      content: input,
+      role: "user",
+    });
+
+    handleSubmit();
+  };
 
   return (
     <div>
@@ -58,7 +72,7 @@ const ChatInput = ({
           value={input}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !disabled) {
-              handleSubmit();
+              handleChatRequestSubmit();
               e.preventDefault();
             }
           }}
@@ -103,7 +117,7 @@ const ChatInput = ({
           </div>
           {input ? (
             <Button
-              onClick={handleSubmit}
+              onClick={handleChatRequestSubmit}
               className=""
               size="icon"
               disabled={disabled || !input}

@@ -4,7 +4,7 @@ import { db } from "@/db";
 import chats from "@/db/schema/chat";
 import { createClient } from "@/lib/supabase/server";
 import { actionOutputSchema } from "@/schema/action.schema";
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, asc } from "drizzle-orm";
 import { actionClient } from "./safe-actions";
 import { z } from "zod";
 import message from "@/db/schema/message";
@@ -76,7 +76,7 @@ export const fetchChatMessages = actionClient
         .select()
         .from(message)
         .where(eq(message.chatId, chatId))
-        .orderBy(desc(message.createdAt));
+        .orderBy(asc(message.createdAt));
 
       return {
         status: "success",
@@ -91,6 +91,47 @@ export const fetchChatMessages = actionClient
         status: "error",
         message:
           "An error occurred while fetching chat messages. Try again later.",
+      };
+    }
+  });
+
+export const saveChatMessage = actionClient
+  .schema(
+    z.object({
+      chatId: z.string(),
+      role: z.enum(["user", "assistant"]),
+      content: z.string(),
+    })
+  )
+  .outputSchema(actionOutputSchema)
+  .action(async ({ parsedInput: { chatId, content, role } }) => {
+    try {
+      const client = await createClient();
+      const {
+        data: { user },
+      } = await client.auth.getUser();
+
+      if (!user) throw new Error("User not found.");
+
+      const savedMessage = await db
+        .insert(message)
+        .values({
+          chatId,
+          role,
+          content,
+        })
+        .returning({ savedMessageId: message.id });
+
+      return {
+        status: "success",
+        data: savedMessage,
+      };
+    } catch (error) {
+      console.log("Error saving chat message:", error);
+      return {
+        status: "error",
+        message:
+          "An error occurred while saving the chat message. Try again later.",
       };
     }
   });
