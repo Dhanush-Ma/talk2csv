@@ -8,8 +8,9 @@ import { PlusCircle } from "lucide-react";
 import Link from "next/link";
 import ChatTitle from "./ChatTitle";
 import { useParams } from "next/navigation";
+import { cn } from "@/lib/utils";
 
-const ChatHistory = () => {
+const ChatHistory = ({ className }: { className?: string }) => {
   const { chatId: currentChatId } = useParams<{ chatId: string }>();
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["chats"],
@@ -20,7 +21,12 @@ const ChatHistory = () => {
   });
 
   return (
-    <div className="w-[20rem] border-r overflow-y-auto">
+    <div
+      className={cn(
+        "w-[20rem] border-r overflow-y-auto hidden lg:block",
+        className
+      )}
+    >
       <div className="border-b-2 py-4 px-4">
         <div>
           <div className="w-full font-semibold text-xl mb-2">Chat History</div>

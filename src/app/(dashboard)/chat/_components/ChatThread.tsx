@@ -55,69 +55,75 @@ const ChatThread = ({ chatId, initialMessages, file }: ChatThreadProps) => {
   }
 
   return (
-    <StickToBottom className="relative flex-1 overflow-hidden">
-      <StickyToBottomContent
-        className={"absolute px-4 inset-0 overflow-y-scroll scrollbar "}
-        contentClassName="pt-8 pb-16 chat-size mx-auto flex flex-col gap-4 max-w-full min-h-[89.5dvh]"
-        footer={
-          <div className="sticky bottom-0 flex flex-col items-center bg-background">
-            <ChatInput
-              chatId={chatId}
-              input={input}
-              handleInputChange={handleInputChange}
-              handleSubmit={handleSubmit}
-              disabled={status !== "ready"}
-            />
-          </div>
-        }
-      >
-        <div className="space-y-8">
-          <ChatMessageAI>
-            <div>
-              <p>
-                <span className="flex items-center gap-1">
-                  Now exploring data from{" "}
-                  <Link
-                    href={`/files/f/${file.id}`}
-                    className="flex items-center gap-1"
-                  >
-                    <span className="text-primary underline">{file.name}.</span>
-                    <ExternalLink size={16} className="text-primary" />
-                  </Link>
-                </span>{" "}
-                I&apos;m ready to help you explore and answer questions based on
-                this data. Ask anything from summaries to deep insights!
-              </p>
-              {messages.length === 1 && (
-                <ChatSuggestions
-                  append={append}
-                  className="mt-4"
-                  chatId={chatId}
-                />
-              )}
-            </div>
-          </ChatMessageAI>
-          {messages.map((message, idx) =>
-            message.role === "user" ? (
-              <ChatMessageUser key={message.id} message={message} />
-            ) : message.role === "assistant" ? (
-              <ChatMessageAI
-                key={message.id}
-                message={message}
-                loading={status === "submitted" && idx === messages.length - 1}
+    <>
+      <StickToBottom className="relative flex-1 overflow-hidden">
+        <StickyToBottomContent
+          className={"absolute px-4 inset-0 overflow-y-scroll scrollbar "}
+          contentClassName="pt-8 pb-16 chat-size mx-auto flex flex-col gap-4 max-w-full min-h-[89.5dvh]"
+          footer={
+            <div className="sticky bottom-0 flex flex-col items-center bg-background">
+              <ChatInput
+                chatId={chatId}
+                input={input}
+                handleInputChange={handleInputChange}
+                handleSubmit={handleSubmit}
+                disabled={status !== "ready"}
               />
-            ) : null
-          )}
-          {error && (
+            </div>
+          }
+        >
+          <div className="space-y-8 pt-20 lg:pt-0">
             <ChatMessageAI>
-              <div className="px-3 py-2 border border-destructive bg-destructive/30 text-destructive w-max rounded-md">
-                <p>{ERROR_MESSAGES.GENERAL_ERROR}</p>
+              <div>
+                <p>
+                  <span className="flex items-center gap-1">
+                    Now exploring data from{" "}
+                    <Link
+                      href={`/files/f/${file.id}`}
+                      className="flex items-center gap-1"
+                    >
+                      <span className="text-primary underline">
+                        {file.name}.
+                      </span>
+                      <ExternalLink size={16} className="text-primary" />
+                    </Link>
+                  </span>{" "}
+                  I&apos;m ready to help you explore and answer questions based
+                  on this data. Ask anything from summaries to deep insights!
+                </p>
+                {messages.length === 1 && (
+                  <ChatSuggestions
+                    append={append}
+                    className="mt-4"
+                    chatId={chatId}
+                  />
+                )}
               </div>
             </ChatMessageAI>
-          )}
-        </div>
-      </StickyToBottomContent>
-    </StickToBottom>
+            {messages.map((message, idx) =>
+              message.role === "user" ? (
+                <ChatMessageUser key={message.id} message={message} />
+              ) : message.role === "assistant" ? (
+                <ChatMessageAI
+                  key={message.id}
+                  message={message}
+                  loading={
+                    status === "submitted" && idx === messages.length - 1
+                  }
+                />
+              ) : null
+            )}
+            {error && (
+              <ChatMessageAI>
+                <div className="px-3 py-2 border border-destructive bg-destructive/30 text-destructive w-max rounded-md">
+                  <p>{ERROR_MESSAGES.GENERAL_ERROR}</p>
+                </div>
+              </ChatMessageAI>
+            )}
+          </div>
+        </StickyToBottomContent>
+      </StickToBottom>
+    </>
   );
 };
 
