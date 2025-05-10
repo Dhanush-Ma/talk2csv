@@ -33,3 +33,11 @@ export function generateCreateTableSQL(headers: string[], tableName: string) {
 export type SearchParams = Promise<{
   [key: string]: string | string[] | undefined;
 }>;
+
+export const chartColors = [
+  "var(--chart-1)",
+  "var(--chart-2)",
+  "var(--chart-3)",
+  "var(--chart-4)",
+  "var(--chart-5)",
+];

@@ -1,18 +1,11 @@
 import Logo from "@/components/shared/Logo";
-import { UIMessage } from "ai";
+import { ToolInvocation, UIMessage } from "ai";
 import { Ellipsis } from "lucide-react";
 import React from "react";
-import Markdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableHead,
-  TableRow,
-  TableCell,
-} from "@/components/ui/table";
-import { cn } from "@/lib/utils";
+import MarkdownRender from "@/components/shared/MarkdownRender";
+import { VizData } from "@/types/common/utils.type";
+import ChatBarVisualization from "./ChatBarVisualization";
+import ChatPieVisualization from "./ChatPieVisualization";
 
 const ChatMessageAI = ({
   message,
@@ -36,77 +29,52 @@ const ChatMessageAI = ({
                 <Ellipsis className="animate-pulse text-primary" />
               </div>
             ) : (
-              <div className="prose prose-sm break-words whitespace-pre-wrap markdow">
-                <Markdown
-                  remarkPlugins={[[remarkGfm, { singleTilde: false }]]}
-                  components={{
-                    table(props) {
-                      const { children, className, ...rest } = props;
+              <div>
+                {message?.content && (
+                  <MarkdownRender>{message.content}</MarkdownRender>
+                )}
+                <div>
+                  {message?.parts.map((part) => {
+                    switch (part.type) {
+                      case "tool-invocation": {
+                        const { toolCallId, args, toolName } =
+                          part.toolInvocation as Omit<
+                            ToolInvocation,
+                            "args"
+                          > & {
+                            args: VizData;
+                          };
 
-                      // Assuming children includes <thead> and <tbody> from markdown
-                      const [thead, tbody] = React.Children.toArray(children);
+                        switch (toolName) {
+                          case "visualAgent": {
+                            if (args.name === "bar-chart") {
+                              return (
+                                <ChatBarVisualization
+                                  key={toolCallId}
+                                  vizData={args}
+                                />
+                              );
+                            }
 
-                      const renderHeader = () => {
-                        const rows = React.Children.toArray(
-                          thead?.props?.children ?? []
-                        );
-                        return (
-                          <TableHeader>
-                            {rows.map((row, idx) => (
-                              <TableRow key={idx}>
-                                {React.Children.map(
-                                  row?.props?.children ?? [],
-                                  (cell, i) => (
-                                    <TableHead key={i}>
-                                      {cell.props.children}
-                                    </TableHead>
-                                  )
-                                )}
-                              </TableRow>
-                            ))}
-                          </TableHeader>
-                        );
-                      };
+                            if (args.name === "pie-chart") {
+                              return (
+                                <ChatPieVisualization
+                                  key={toolCallId}
+                                  vizData={args}
+                                />
+                              );
+                            }
+                          }
 
-                      const renderBody = () => {
-                        const rows = React.Children.toArray(
-                          tbody?.props?.children ?? []
-                        );
-                        return (
-                          <TableBody>
-                            {rows.map((row, idx) => (
-                              <TableRow key={idx}>
-                                {React.Children.map(
-                                  row?.props?.children ?? [],
-                                  (cell, i) => (
-                                    <TableCell key={i}>
-                                      {cell.props.children}
-                                    </TableCell>
-                                  )
-                                )}
-                              </TableRow>
-                            ))}
-                          </TableBody>
-                        );
-                      };
+                          default:
+                            return null;
+                        }
+                      }
+                    }
 
-                      return (
-                        <Table
-                          className={cn(
-                            className,
-                            "rounded-md border overflow-hidden border-muted"
-                          )}
-                          {...rest}
-                        >
-                          {renderHeader()}
-                          {renderBody()}
-                        </Table>
-                      );
-                    },
-                  }}
-                >
-                  {message?.content}
-                </Markdown>
+                    return null;
+                  })}
+                </div>
               </div>
             )}
           </>

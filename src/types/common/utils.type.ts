@@ -15,3 +15,14 @@ export type ChatModel = {
   provider: string;
   disabled: boolean;
 };
+
+export type ChartItem = {
+  label: string;
+  value: number;
+};
+
+export type VizData = {
+  name: "bar-chart" | "pie-chart";
+  description: string;
+  data: ChartItem[];
+};

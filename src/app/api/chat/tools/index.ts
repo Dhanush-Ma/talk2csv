@@ -14,33 +14,45 @@ export const tools: ToolSet = {
       try {
         const results = await db.execute(query);
 
-        // const { response } = await generateText({
-        //   model: google(DEFAULT_CHAT_MODEL.id),
-        //   system:
-        //     `You are a data assistant helping users interpret SQL query results.
-        //         Your task is to:
-        //         - Analyze and summarize the results retrieved from the SQL query below.
-        //         - Present the results in a readable **markdown table** format.
-        //         - Highlight notable trends, patterns, or anomalies in plain language.
-        //         - Do not reprint or explain the SQL query syntax.
-        //         - Keep the explanation concise and user-friendly.`.trim(),
-        //   messages: [
-        //     {
-        //       role: "user",
-        //       content: `Here are the results from the SQL query ${query}: \n${results}`,
-        //     },
-        //   ],
-        // });
-
-        // console.log(response.messages[0]);
-
-        // return response.messages[0];
-
         return results;
       } catch (error) {
         console.error("Error executing SQL query:", error);
         return "An error occurred while executing the SQL query. Please try again.";
       }
     },
+  }),
+
+  visualAgent: tool({
+    description:
+      "Generates visualizations based on the provided data in the form of either a bar chart or pie chart. This tool helps create data visualizations for clearer insights, and it accepts data in structured formats to visualize key metrics or categories.",
+    parameters: z.object({
+      name: z
+        .enum(["bar-chart", "pie-chart"])
+        .describe("The type of chart, either 'bar-chart' or 'pie-chart'."),
+      description: z
+        .string()
+        .describe(
+          "A brief description of the chart, explaining its purpose or what it visualizes."
+        ),
+      data: z
+        .array(
+          z.object({
+            label: z
+              .string()
+              .describe(
+                "The label for the data category (e.g., 'Engineering', 'Product A')."
+              ),
+            value: z
+              .number()
+              .min(0)
+              .describe(
+                "The numerical value associated with the data category (e.g., budget or sales figures)."
+              ),
+          })
+        )
+        .describe(
+          "An array of data points representing different categories and their values."
+        ),
+    }),
   }),
 };
