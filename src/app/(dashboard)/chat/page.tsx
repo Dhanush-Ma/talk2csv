@@ -114,69 +114,75 @@ const NewChatPage = () => {
             </p>
           </div>
         </div>
-        <div className="flex gap-x-2">
-          <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                role="combobox"
-                aria-expanded={open}
-                className="w-[200px] justify-between"
-              >
-                {selectedFile
-                  ? files.find((f) => f.id === selectedFile)?.name
-                  : "Select a file..."}
-                <ChevronsUpDown className="opacity-50" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
-              <Command>
-                <CommandInput
-                  disabled={!isFilesFetched}
-                  placeholder="Search for a file..."
-                  className="h-9"
-                />
-                <CommandList>
-                  <CommandEmpty>
-                    {isFilesFetched ? (
-                      "No files found."
-                    ) : (
-                      <Loader className="fill-foreground mx-auto" />
-                    )}
-                  </CommandEmpty>
-                  <CommandGroup>
-                    {files.map((f) => (
-                      <CommandItem
-                        key={f.id}
-                        value={f.id}
-                        onSelect={(currentValue) => {
-                          setSelectedFile(currentValue);
-                          setOpen(false);
-                        }}
-                      >
-                        {f.name}
-                        <Check
-                          className={cn(
-                            "ml-auto",
-                            selectedFile === f.id ? "opacity-100" : "opacity-0"
-                          )}
-                        />
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </CommandList>
-              </Command>
-            </PopoverContent>
-          </Popover>
-          <Button
-            disabled={!selectedFile || isExecuting}
-            loading={isExecuting}
-            className="w-[200px]"
-            onClick={handleCreateChat}
-          >
-            Continue
-            {!isExecuting && <ArrowRight />}
-          </Button>
+        <div className="flex gap-x-2 w-full">
+          <div className="w-1/2">
+            <Popover open={open} onOpenChange={setOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  aria-expanded={open}
+                  className="w-full justify-between"
+                >
+                  {selectedFile
+                    ? files.find((f) => f.id === selectedFile)?.name
+                    : "Select a file..."}
+                  <ChevronsUpDown className="opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-full p-0">
+                <Command>
+                  <CommandInput
+                    disabled={!isFilesFetched}
+                    placeholder="Search for a file..."
+                    className="h-9"
+                  />
+                  <CommandList>
+                    <CommandEmpty>
+                      {isFilesFetched ? (
+                        "No files found."
+                      ) : (
+                        <Loader className="fill-foreground mx-auto" />
+                      )}
+                    </CommandEmpty>
+                    <CommandGroup>
+                      {files.map((f) => (
+                        <CommandItem
+                          key={f.id}
+                          value={f.id}
+                          onSelect={(currentValue) => {
+                            setSelectedFile(currentValue);
+                            setOpen(false);
+                          }}
+                        >
+                          {f.name}
+                          <Check
+                            className={cn(
+                              "ml-auto",
+                              selectedFile === f.id
+                                ? "opacity-100"
+                                : "opacity-0"
+                            )}
+                          />
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
+          </div>
+          <div className="w-1/2">
+            <Button
+              disabled={!selectedFile || isExecuting}
+              loading={isExecuting}
+              onClick={handleCreateChat}
+              className="w-full"
+            >
+              Continue
+              {!isExecuting && <ArrowRight />}
+            </Button>
+          </div>
         </div>
       </div>
     </div>
