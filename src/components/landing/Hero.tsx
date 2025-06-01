@@ -31,11 +31,11 @@ const Hero = () => {
           No more endless scrolling through spreadsheets. Just ask your data.
         </p>
         <ShimmerButton
-          className="bg-primary text-xl my-6 z-10"
+          className="bg-primary text-xl my-6 z-10 "
           shimmerColor="#FFFFFF"
           background="#6366f1"
         >
-          Try it for free
+          <p className="text-primary-foreground">Try it for free</p>
         </ShimmerButton>
         <RetroGrid
           className="z-0"

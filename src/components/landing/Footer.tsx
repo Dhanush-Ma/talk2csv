@@ -34,7 +34,11 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <h4 className="text-center text-[20vw] absolute bg-transparent -bottom-30 left-1/2 -translate-x-1/2 text-primary/40">
+      <h4
+        className="text-center text-[20rem] absolute -bottom-30 left-1/2 -translate-x-1/2 
+             bg-gradient-to-r from-primary/10 via-primary/20 to-primary/10 
+             bg-clip-text text-transparent select-none pointer-events-none"
+      >
         talk2csv
       </h4>
     </footer>
