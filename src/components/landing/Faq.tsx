@@ -16,7 +16,7 @@ export const faqs = [
   {
     question: "Is Talk2CSV free to use?",
     answer:
-      "Yes, Talk2CSV is completely free during our beta release. You can upload and interact with an unlimited number of CSV files.",
+      "Yes, Talk2CSV is completely free during our beta release. You can upload and interact with a limited number of CSV file uploads.",
   },
   {
     question: "Do I need coding or SQL knowledge?",
@@ -62,8 +62,13 @@ export const faqs = [
 
 const Faq = () => {
   return (
-    <div className="my-50 flex items-start gap-4 w-[70%] mx-auto" id="faqs">
-      <h2 className="text-7xl">Frequetly Asked Questions</h2>
+    <div
+      className="my-50 flex items-start gap-y-8 gap-x-4 lg:w-[80%] xl:w-[70%] mx-auto flex-col lg:flex-row"
+      id="faqs"
+    >
+      <h2 className="text-7xl text-center lg:text-left">
+        Frequetly Asked Questions
+      </h2>
       <Accordion type="single" collapsible className="w-full">
         {faqs.map((f) => (
           <AccordionItem
@@ -72,10 +77,10 @@ const Faq = () => {
             className="px-4 border-0 data-[state=open]:border border-dashed border-primary rounded-lg data-[state=open]:bg-primary/10"
           >
             <AccordionTrigger className="group text-xl">
-              <div className="flex gap-2 items-center">
+              <div className="flex gap-2 items-start">
                 <X
                   id="faq-tag-icon"
-                  className="transition-transform duration-300 group-data-[state=open]:rotate-0 group-data-[state=closed]:rotate-45"
+                  className="transition-transform duration-300 group-data-[state=open]:rotate-0 group-data-[state=closed]:rotate-45 mt-[3px] shrink-0"
                 />
                 {f.question}
               </div>

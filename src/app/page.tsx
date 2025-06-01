@@ -13,7 +13,9 @@ const SatoshiFont = localFont({
 export default function Home() {
   return (
     <div>
-      <div className={cn("container mx-auto", SatoshiFont.className)}>
+      <div
+        className={cn("container mx-auto px-6 lg:px-0", SatoshiFont.className)}
+      >
         <Header />
         <Hero />
         <Features />

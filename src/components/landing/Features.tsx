@@ -1,41 +1,103 @@
-import React from "react";
-import { BellIcon, Share2Icon, CalendarIcon, FileTextIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { BentoCard, BentoGrid } from "@/components/magicui/bento-grid";
 import { Marquee } from "@/components/magicui/marquee";
+import { cn } from "@/lib/utils";
+import { ChartPie, MessageSquareText, Upload, User } from "lucide-react";
 import { AnimatedList, AnimatedListItem } from "../magicui/animated-list";
-import { AnimatedBeamMultipleOutputDemo } from "./Beam";
 import { ShimmerButton } from "../magicui/shimmer-button";
+import Logo from "../shared/Logo";
+import { AnimatedBeamMultipleOutputDemo } from "./Beam";
 
 const files = [
   {
-    name: "bitcoin.pdf",
-    body: "Bitcoin is a cryptocurrency invented in 2008 by an unknown person or group of people using the name Satoshi Nakamoto.",
+    name: "sales_report.csv",
+    body: "Monthly sales data for Q1 2025 across all regional branches including revenue, units sold, and sales targets.",
   },
   {
-    name: "finances.xlsx",
-    body: "A spreadsheet or worksheet is a file made of rows and columns that help sort data, arrange data easily, and calculate numerical data.",
+    name: "employee_directory.csv",
+    body: "List of company employees including names, departments, job titles, and contact information.",
   },
   {
-    name: "logo.svg",
-    body: "Scalable Vector Graphics is an Extensible Markup Language-based vector image format for two-dimensional graphics with support for interactivity and animation.",
+    name: "marketing_campaigns.csv",
+    body: "Performance metrics for digital marketing campaigns such as CTR, conversion rates, and ad spend.",
   },
   {
-    name: "keys.gpg",
-    body: "GPG keys are used to encrypt and decrypt email, files, directories, and whole disk partitions and to authenticate messages.",
+    name: "customer_feedback.csv",
+    body: "Aggregated feedback from users including ratings, comments, and customer sentiment scores.",
   },
   {
-    name: "seed.txt",
-    body: "A seed phrase, seed recovery phrase or backup seed phrase is a list of words which store all the information needed to recover Bitcoin funds on-chain.",
+    name: "website_traffic.csv",
+    body: "Analytics data for site traffic, user sessions, bounce rates, and popular landing pages.",
+  },
+  {
+    name: "product_inventory.csv",
+    body: "Current stock levels, SKU details, product descriptions, and reorder thresholds.",
+  },
+  {
+    name: "financial_summary.csv",
+    body: "Quarterly income statement including revenue, expenses, profits, and EBITDA calculations.",
+  },
+  {
+    name: "project_timeline.csv",
+    body: "Milestones, deadlines, and task assignments for ongoing internal projects.",
+  },
+  {
+    name: "research_data.csv",
+    body: "Experimental results and observation logs from the latest product usability study.",
+  },
+  {
+    name: "support_tickets.csv",
+    body: "List of customer support cases including timestamps, issue categories, and resolution status.",
+  },
+];
+
+const chatConversation = [
+  {
+    role: "assistant",
+    content:
+      "Looks like you’ve uploaded **HR Sales Report 2025 - Acme.Inc**. What would you like to know?",
+  },
+  {
+    role: "user",
+    content: "Show me the top-performing sales reps.",
+  },
+  {
+    role: "assistant",
+    content: `Here are the top 3 sales representatives based on total sales in 2025:\n\n1. **Jane Doe** – $1.2M\n2. **Michael Tan** – $1.08M\n3. **Lina Reyes** – $965K\n\nWould you like me to break this down by region or quarter?`,
+  },
+  {
+    role: "user",
+    content: "Yes, by region please.",
+  },
+  {
+    role: "assistant",
+    content: `Sure! Here's the breakdown of top performers by region:\n\n- **North America:** Jane Doe – $1.2M\n- **Europe:** Lina Reyes – $965K\n- **Asia-Pacific:** Arjun Patel – $890K\n\nLet me know if you want this as a chart.`,
+  },
+  {
+    role: "user",
+    content: "Show it as a bar chart.",
+  },
+  {
+    role: "assistant",
+    content:
+      "✅ Done! Here’s a bar chart comparing top sales reps by region. 📊",
+  },
+  {
+    role: "user",
+    content: "What’s the average monthly sales per rep?",
+  },
+  {
+    role: "assistant",
+    content:
+      "The average monthly sales per rep in 2025 is approximately **$87,500**.\n\nWould you like to filter this by department or tenure?",
   },
 ];
 
 const features = [
   {
-    Icon: FileTextIcon,
-    name: "Chat with your data",
+    Icon: Upload,
+    name: "Upload your files",
     description:
-      "Ask questions in plain English and get answers from your CSV files instantly.",
+      "We will convert them to a searchable SQL database. No worries your data is secured.",
     href: "/signup",
     cta: "Learn more",
     className: "col-span-3 lg:col-span-1",
@@ -55,8 +117,8 @@ const features = [
             )}
           >
             <div className="flex flex-row items-center gap-2">
-              <div className="flex flex-col">
-                <figcaption className="text-sm font-medium dark:text-white ">
+              <div className="flex flex-col text-wrap">
+                <figcaption className="text-sm font-medium dark:text-white text-wrap">
                   {f.name}
                 </figcaption>
               </div>
@@ -68,124 +130,46 @@ const features = [
     ),
   },
   {
-    Icon: BellIcon,
-    name: "Automatic Insights",
+    Icon: MessageSquareText,
+    name: "Chat with your data",
     description:
-      "Talk2CSV surfaces patterns, trends, and summaries without manual formulas.",
+      "Ask questions in plain English and get answers from your CSV files instantly.",
     href: "/signup",
     cta: "Learn more",
     className: "col-span-3 lg:col-span-2",
     background: (
       <AnimatedList className="absolute right-2 top-4 h-[300px] w-full scale-75 border-none transition-all duration-300 ease-out [mask-image:linear-gradient(to_top,transparent_10%,#000_100%)] group-hover:scale-90">
-        <AnimatedListItem>
-          <div className="flex flex-row items-center gap-2">
-            <div className="flex flex-col">
-              <figcaption className="text-sm font-medium dark:text-white ">
-                New file uploaded
-              </figcaption>
+        {chatConversation.map((message, idx) => (
+          <AnimatedListItem key={idx}>
+            <div className="flex flex-row items-center gap-2">
+              <div className="flex gap-2 items-start">
+                <div className="shrink-0 mt-0.5">
+                  {message.role === "assistant" ? (
+                    <Logo transparent className="h-4 w-4" />
+                  ) : (
+                    <User className="h-4 w-4" />
+                  )}
+                </div>
+                <figcaption className="text-sm font-medium dark:text-white ">
+                  {message.content}
+                </figcaption>
+              </div>
             </div>
-          </div>
-          <blockquote className="mt-2 text-xs">
-            You have a new file uploaded to your account.
-          </blockquote>
-        </AnimatedListItem>
-        <AnimatedListItem>
-          <div className="flex flex-row items-center gap-2">
-            <div className="flex flex-col">
-              <figcaption className="text-sm font-medium dark:text-white ">
-                New file uploaded
-              </figcaption>
-            </div>
-          </div>
-          <blockquote className="mt-2 text-xs">
-            You have a new file uploaded to your account.
-          </blockquote>
-        </AnimatedListItem>
-        <AnimatedListItem>
-          <div className="flex flex-row items-center gap-2">
-            <div className="flex flex-col">
-              <figcaption className="text-sm font-medium dark:text-white ">
-                New file uploaded
-              </figcaption>
-            </div>
-          </div>
-          <blockquote className="mt-2 text-xs">
-            You have a new file uploaded to your account.
-          </blockquote>
-        </AnimatedListItem>
-        <AnimatedListItem>
-          <div className="flex flex-row items-center gap-2">
-            <div className="flex flex-col">
-              <figcaption className="text-sm font-medium dark:text-white ">
-                New file uploaded
-              </figcaption>
-            </div>
-          </div>
-          <blockquote className="mt-2 text-xs">
-            You have a new file uploaded to your account.
-          </blockquote>
-        </AnimatedListItem>
-        <AnimatedListItem>
-          <div className="flex flex-row items-center gap-2">
-            <div className="flex flex-col">
-              <figcaption className="text-sm font-medium dark:text-white ">
-                New file uploaded
-              </figcaption>
-            </div>
-          </div>
-          <blockquote className="mt-2 text-xs">
-            You have a new file uploaded to your account.
-          </blockquote>
-        </AnimatedListItem>
-        <AnimatedListItem>
-          <div className="flex flex-row items-center gap-2">
-            <div className="flex flex-col">
-              <figcaption className="text-sm font-medium dark:text-white ">
-                New file uploaded
-              </figcaption>
-            </div>
-          </div>
-          <blockquote className="mt-2 text-xs">
-            You have a new file uploaded to your account.
-          </blockquote>
-        </AnimatedListItem>
-        <AnimatedListItem>
-          <div className="flex flex-row items-center gap-2">
-            <div className="flex flex-col">
-              <figcaption className="text-sm font-medium dark:text-white ">
-                New file uploaded
-              </figcaption>
-            </div>
-          </div>
-          <blockquote className="mt-2 text-xs">
-            You have a new file uploaded to your account.
-          </blockquote>
-        </AnimatedListItem>
+          </AnimatedListItem>
+        ))}
       </AnimatedList>
     ),
   },
   {
-    Icon: Share2Icon,
-    name: "No-code integrations",
+    Icon: ChartPie,
+    name: "Instant visualizations",
     description:
-      "Export results, connect to Notion, Sheets, Zapier, and more with zero code.",
+      "Turn your CSV queries into clear bar charts, line graphs, and more — no setup needed.",
     href: "/signup",
     cta: "Learn more",
-    className: "col-span-3 lg:col-span-2",
+    className: "col-span-3 lg:col-span-3 h-[300px]",
     background: (
-      <AnimatedBeamMultipleOutputDemo className="absolute right-2 top-4 h-[300px] border-none transition-all duration-300 ease-out [mask-image:linear-gradient(to_top,transparent_10%,#000_100%)] group-hover:scale-105" />
-    ),
-  },
-  {
-    Icon: CalendarIcon,
-    name: "Time-based filtering",
-    description:
-      "Analyze your data over time. Just ask: 'Show revenue by month'.",
-    className: "col-span-3 lg:col-span-1",
-    href: "/signup",
-    cta: "Learn more",
-    background: (
-      <AnimatedBeamMultipleOutputDemo className="absolute right-2 top-4 h-[300px] border-none transition-all duration-300 ease-out [mask-image:linear-gradient(to_top,transparent_10%,#000_100%)] group-hover:scale-105" />
+      <AnimatedBeamMultipleOutputDemo className="absolute right-2 top-4 h-[200px] border-none transition-all duration-300 ease-out [mask-image:linear-gradient(to_top,transparent_10%,#000_100%)] group-hover:scale-105" />
     ),
   },
 ];
