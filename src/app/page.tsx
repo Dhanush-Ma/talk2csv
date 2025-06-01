@@ -1,16 +1,25 @@
-import { AppConfig } from "@/lib/config";
-import { createClient } from "@/lib/supabase/server";
-import Link from "next/link";
+import Faq from "@/components/landing/Faq";
+import Features from "@/components/landing/Features";
+import Footer from "@/components/landing/Footer";
+import Header from "@/components/landing/Header";
+import Hero from "@/components/landing/Hero";
+import { cn } from "@/lib/utils";
+import localFont from "next/font/local";
 
-export default async function Home() {
-  const client = await createClient();
-  const { data } = await client.auth.getUser();
+const SatoshiFont = localFont({
+  src: "../assets/fonts/Satoshi.ttf",
+});
 
+export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-24">
-      <p>Landing Page</p>
-      <p>{data.user?.email}</p>
-      <Link href={AppConfig.DEFAULT_ROUTE}>Go to app</Link>
+    <div>
+      <div className={cn("container mx-auto", SatoshiFont.className)}>
+        <Header />
+        <Hero />
+        <Features />
+        <Faq />
+      </div>
+      <Footer />
     </div>
   );
 }
