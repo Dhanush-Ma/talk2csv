@@ -1,4 +1,5 @@
 import { SVGProps } from "react";
+import { motion } from "motion/react";
 
 type SafariMode = "default" | "simple";
 
@@ -138,7 +139,12 @@ export function Safari({
           </>
         ) : null}
         {imageSrc && (
-          <image
+          <motion.image
+            className="bg-primary"
+            key={imageSrc}
+            initial={{ opacity: 0.5 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
             href={imageSrc}
             width="1200"
             height="700"

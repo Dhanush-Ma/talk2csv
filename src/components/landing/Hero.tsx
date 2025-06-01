@@ -5,8 +5,27 @@ import { motion } from "motion/react";
 import { RetroGrid } from "../magicui/retro-grid";
 import { Safari } from "../magicui/safari";
 import { ShimmerButton } from "../magicui/shimmer-button";
+import { useEffect, useState } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
+import Iphone15Pro from "../magicui/iphone-15-pro";
+
+const mockups = [
+  "https://cdn.dribbble.com/userupload/16744137/file/original-ddf6650ad6b5c360f3eb7678178b614c.png?resize=1024x768&vertical=center",
+  "https://cdn.dribbble.com/userupload/13312688/file/original-d92951d609a9587a8506d0554c5026e2.png?resize=1024x768&vertical=center",
+];
 
 const Hero = () => {
+  const [mockupIndex, setMockupIndex] = useState(0);
+  const isMobile = useIsMobile();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMockupIndex((prevIndex) => (prevIndex + 1) % mockups.length);
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <motion.div
       animate={{ opacity: 1, y: 0, z: 0 }}
@@ -42,13 +61,33 @@ const Hero = () => {
           lightLineColor="#6366f1"
         />
       </div>
-      <div className="w-full aspect-video rounded-lg bg-linear-45 from-primary/30 to-primary/40 mt-20 z-[10000] flex justify-center items-center relative mb-60">
-        <Safari
-          url="talk2csv.com"
-          className="w-[80%] z-50 absolute top-20"
-          imageSrc="https://cdn.dribbble.com/userupload/16744137/file/original-ddf6650ad6b5c360f3eb7678178b614c.png?resize=1024x768&vertical=center"
-          mode="simple"
-        />
+      <div className="relative w-full h-max py-20 px-10 rounded-lg bg-linear-45 from-primary/30 to-primary/40 z-[10000] flex flex-col items-center justify-center gap-y-12 mt-20">
+        <div className="flex items-center justify-center relative gap-8">
+          {Array.from({ length: mockups.length }).map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setMockupIndex(index)}
+              className={cn(
+                "w-4 h-4 rounded-full bg-primary-foreground cursor-pointer",
+                {
+                  "bg-primary border border-primary-foreground":
+                    index === mockupIndex,
+                  "bg-primary/50": index !== mockupIndex,
+                }
+              )}
+            />
+          ))}
+        </div>
+        {isMobile ? (
+          <Iphone15Pro className="size-full" src={mockups[mockupIndex]} />
+        ) : (
+          <Safari
+            url="talk2csv.com"
+            className="w-[90%] h-[90%] rounded-lg overflow-hidden"
+            imageSrc={mockups[mockupIndex]}
+            mode="default"
+          />
+        )}
       </div>
     </motion.div>
   );

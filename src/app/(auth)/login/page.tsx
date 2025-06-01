@@ -44,7 +44,7 @@ const LoginPage = () => {
       <div className="flex flex-col items-center justify-center">
         <Card className="shadow-none border-0 w-sm md:w-[28rem]">
           <CardHeader className="flex flex-col items-center">
-            <Logo />
+            <Logo transparent />
             <CardTitle className="text-2xl">Welcome back!</CardTitle>
             <CardDescription className="text-center">
               Turn spreadsheets into conversations.

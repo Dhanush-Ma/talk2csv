@@ -29,12 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className="scroll-smooth">
       <QueryProvider>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
+        <ThemeProvider attribute="class" enableSystem disableTransitionOnChange>
           <body
             className={`${geistSans.variable} ${geistMono.variable} antialiased`}
           >
