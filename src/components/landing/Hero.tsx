@@ -61,7 +61,7 @@ const Hero = () => {
           lightLineColor="#6366f1"
         />
       </div>
-      <div className="relative w-full h-max py-20 px-10 rounded-lg bg-linear-45 from-primary/30 to-primary/40 z-[10000] flex flex-col items-center justify-center gap-y-12 mt-20">
+      <div className="relative z-[9999] w-full h-max py-20 px-10 rounded-lg bg-gradient-to-br from-primary/30 to-primary/40 flex flex-col items-center justify-center gap-y-12 mt-20">
         <div className="flex items-center justify-center relative gap-8">
           {Array.from({ length: mockups.length }).map((_, index) => (
             <button

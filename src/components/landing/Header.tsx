@@ -18,9 +18,9 @@ const Header = () => {
   return (
     <div
       className={cn(
-        "flex items-center justify-between py-4 mx-auto sticky top-2 z-50 overflow-hidden transition-all duration-300 w-[100%]",
+        "flex items-center justify-between py-4 mx-auto sticky top-2 overflow-hidden transition-all duration-300 w-[100%] z-[1000]",
         {
-          "backdrop-blur-md bg-primary/10 border border-primary/40 w-full lg:w-[50%] z-[1000] px-10 rounded-full":
+          "backdrop-blur-md bg-primary/10 border border-primary/40 w-full lg:w-[50%] px-10 rounded-full":
             scrolled,
         }
       )}
