@@ -16,8 +16,6 @@ const ChatMessageAI = ({
   loading?: boolean;
   children?: React.ReactNode;
 }) => {
-  console.log(message);
-
   return (
     <div className="flex items-start gap-4 w-full max-w-full">
       <div className="h-8 w-8 overflow-hidden shrink-0 flex items-center justify-center">

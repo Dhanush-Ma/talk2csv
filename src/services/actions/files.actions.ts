@@ -141,7 +141,7 @@ export const createUserFile = actionClient
         const validHeaders = headers.filter((header) => header);
 
         // Create new table with the table name
-        await tx.execute(generateCreateTableSQL(validHeaders, tableName));
+        await tx.execute(generateCreateTableSQL(validHeaders, tableName, rows));
 
         // Insert the data into the new table
         let insertSQL = `INSERT INTO "${tableName}" VALUES `;

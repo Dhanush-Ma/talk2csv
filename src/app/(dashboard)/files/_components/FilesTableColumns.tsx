@@ -29,7 +29,7 @@ const columnHelper = createColumnHelper<SelectUserFile>();
 export const columns = [
   columnHelper.accessor("name", {
     id: "fileName",
-    header: "File Name",
+    header: "Name",
     cell: (info) => (
       <div className="flex items-center">
         <span className="font-medium">{info.getValue()}</span>

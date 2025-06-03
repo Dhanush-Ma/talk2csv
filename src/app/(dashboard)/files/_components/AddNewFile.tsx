@@ -222,6 +222,15 @@ const AddNewFile = () => {
                         onChange={(e) => {
                           setTagValue(e.currentTarget.value);
                         }}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" && tagValue) {
+                            e.preventDefault();
+                            if (field.value.length < 3) {
+                              field.onChange([...field.value, tagValue]);
+                              setTagValue("");
+                            }
+                          }
+                        }}
                       />
                       <TooltipProvider>
                         <Tooltip delayDuration={0}>

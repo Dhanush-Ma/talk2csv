@@ -74,7 +74,7 @@ function DialogHeader({
   ...props
 }: React.ComponentProps<"div">) {
   return (
-    <div className="border-b px-6 py-4 flex items-start justify-between">
+    <div className="border-b p-6 flex items-start justify-between">
       <div
         data-slot="dialog-header"
         className={cn(
