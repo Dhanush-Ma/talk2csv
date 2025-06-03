@@ -4,7 +4,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Cell, Pie, PieChart } from "recharts";
+import { Cell, Legend, Pie, PieChart } from "recharts";
 import { chartColors } from "@/lib/utils";
 
 const ChatPieVisualization = ({ vizData }: { vizData: VizData }) => {
@@ -16,6 +16,7 @@ const ChatPieVisualization = ({ vizData }: { vizData: VizData }) => {
             cursor={false}
             content={<ChartTooltipContent hideLabel />}
           />
+          <Legend layout="horizontal" align="center" verticalAlign="bottom" />
           <Pie data={vizData.data} dataKey="value" nameKey="label">
             {vizData.data.map((entry, index) => (
               <Cell

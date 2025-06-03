@@ -18,8 +18,8 @@ const ChatMessageAI = ({
 }) => {
   return (
     <div className="flex items-start gap-4 w-full max-w-full">
-      <div className="h-8 w-8 rounded-full border-2 border-primary overflow-hidden shrink-0 flex items-center justify-center">
-        <Logo width={20} height={20} transparent />
+      <div className="h-8 w-8 overflow-hidden shrink-0 flex items-center justify-center">
+        <Logo width={24} height={24} transparent />
       </div>
       <div className="min-w-0 flex-1">
         {children ?? (

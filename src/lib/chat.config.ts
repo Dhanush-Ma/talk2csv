@@ -14,7 +14,7 @@ export const CHAT_MODELS = [
     name: "GPT-4o mini",
     id: "gpt-4o-mini",
     provider: "OpenAI",
-    disabled: false,
+    disabled: true,
   },
 ];
 

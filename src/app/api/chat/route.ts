@@ -4,6 +4,7 @@ import { streamText } from "ai";
 import { tools } from "./tools";
 import { openai } from "@ai-sdk/openai";
 import { ChatModel } from "@/types/common/utils.type";
+import { writeJsonToFile } from "../lib/utils";
 
 export const maxDuration = 180;
 
@@ -26,6 +27,13 @@ export async function POST(req: Request) {
     tools: tools,
     maxSteps: 2,
     onFinish: async ({ response }) => {
+      writeJsonToFile(
+        `output/chat-${chatId}-${
+          new Date().toISOString().replace(/[-:]/g, "").split(".")[0]
+        }.json`,
+        response.messages
+      );
+
       for (const message of response.messages) {
         const content = message.content[0];
 

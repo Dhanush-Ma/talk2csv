@@ -1,8 +1,7 @@
 "use client";
 
+import ScrollToBottom from "@/components/shared/ScrollToBottom";
 import { Button } from "@/components/ui/button";
-import { Send } from "lucide-react";
-import React from "react";
 import {
   Select,
   SelectContent,
@@ -13,17 +12,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CHAT_MODELS, DEFAULT_CHAT_MODEL } from "@/lib/chat.config";
-import { useChatStore } from "@/store/chat.store";
-import { TooltipProvider } from "@radix-ui/react-tooltip";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import ScrollToBottom from "@/components/shared/ScrollToBottom";
-import { ChatRequestOptions } from "ai";
 import { saveChatMessage } from "@/services/actions/chat.actions";
+import { useChatStore } from "@/store/chat.store";
+import { ChatRequestOptions } from "ai";
+import { Loader2, Send } from "lucide-react";
 import { useTheme } from "next-themes";
+import React from "react";
 
 type ChatInputProps = {
   chatId: string;
@@ -127,21 +121,12 @@ const ChatInput = ({
               size="icon"
               disabled={disabled || !input}
             >
-              <Send />
+              {disabled ? <Loader2 className="animate-spin" /> : <Send />}
             </Button>
           ) : (
-            <TooltipProvider delayDuration={0}>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Button className="" size="icon" disabled={!input}>
-                    <Send />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  {!input ? "Requires a text input" : null}
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <Button className="" size="icon" disabled={!input}>
+              {disabled ? <Loader2 className="animate-spin" /> : <Send />}
+            </Button>
           )}
         </div>
       </div>
