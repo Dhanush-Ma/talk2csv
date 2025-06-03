@@ -4,7 +4,7 @@ import { tools } from "./tools";
 import { openai } from "@ai-sdk/openai";
 import { ChatModel } from "@/types/common/utils.type";
 
-export const maxDuration = 180;
+export const maxDuration = 60;
 
 type ChatRequestBody = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
