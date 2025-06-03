@@ -62,9 +62,13 @@ const ChatThread = ({ chatId, initialMessages, file }: ChatThreadProps) => {
       role: m.role,
       content: m.content,
       createdAt: m.createdAt ? new Date(m.createdAt) : undefined,
-      parts: (m.parts || []) as UIMessage["parts"],
+      parts: (m.parts as UIMessage["parts"]) ?? undefined,
     })),
   });
+
+  if (error) {
+    console.log("Chat error:", error);
+  }
 
   return (
     <>
@@ -88,18 +92,13 @@ const ChatThread = ({ chatId, initialMessages, file }: ChatThreadProps) => {
             <ChatMessageAI>
               <div>
                 <p>
-                  <span className="flex items-center gap-1">
-                    Now exploring data from{" "}
-                    <Link
-                      href={`/files/f/${file.id}`}
-                      className="flex items-center gap-1"
-                    >
-                      <span className="text-primary underline">
-                        {file.name}.
-                      </span>
-                      <ExternalLink size={16} className="text-primary" />
-                    </Link>
-                  </span>{" "}
+                  Now exploring data from{" "}
+                  <Link href={`/files/f/${file.id}`} className="inline">
+                    <span className="text-primary underline">{file.name}.</span>
+                    <ExternalLink size={16} className="text-primary inline" />
+                  </Link>
+                </p>
+                <p>
                   I&apos;m ready to help you explore and answer questions based
                   on this data. Ask anything from summaries to deep insights!
                 </p>

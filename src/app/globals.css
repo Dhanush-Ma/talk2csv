@@ -216,7 +216,7 @@
   }
 
   .chat-size {
-    @apply w-[90%] max-w-2xl lg:w-2xl;
+    @apply w-[100%] max-w-4xl lg:w-4xl;
   }
 }
 

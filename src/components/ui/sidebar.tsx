@@ -2,7 +2,7 @@
 
 import { Slot } from "@radix-ui/react-slot";
 import { VariantProps, cva } from "class-variance-authority";
-import { AlignJustify, ChevronLeft, ChevronRight } from "lucide-react";
+import { Menu, ChevronLeft, ChevronRight } from "lucide-react";
 import * as React from "react";
 
 import { Button } from "@/components/ui/button";
@@ -300,7 +300,7 @@ function SidebarTriggerMobile({
       }}
       {...props}
     >
-      <AlignJustify size={24} />
+      <Menu size={24} />
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   );

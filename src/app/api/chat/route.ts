@@ -24,6 +24,9 @@ export async function POST(req: Request) {
     messages,
     tools: tools,
     maxSteps: 2,
+    onError: (error) => {
+      console.error("Error in streaming response:", error);
+    },
   });
 
   return result.toDataStreamResponse();

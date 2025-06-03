@@ -62,7 +62,7 @@ const ChatInput = ({
     <div className="w-full">
       <ScrollToBottom />
 
-      <div className="bg-muted rounded-lg border overflow-hidden  chat-size mx-auto mb-2">
+      <div className="bg-muted rounded-lg border overflow-hidden chat-size mx-auto mb-2">
         <textarea
           value={input}
           onKeyDown={(e) => {
