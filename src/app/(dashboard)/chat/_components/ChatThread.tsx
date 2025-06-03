@@ -13,6 +13,8 @@ import ChatInput from "./ChatInput";
 import ChatMessageAI from "./ChatMessageAI";
 import ChatMessageUser from "./ChatMessageUser";
 import ChatSuggestions from "./ChatSuggestions";
+import { saveChatMessage } from "@/services/actions/chat.actions";
+import { UIMessage } from "ai";
 
 type ChatThreadProps = {
   chatId: string;
@@ -40,18 +42,17 @@ const ChatThread = ({ chatId, initialMessages, file }: ChatThreadProps) => {
       chatId: chatId,
     },
     sendExtraMessageFields: true,
-    maxSteps: 2,
     onFinish(message) {
-      if (
-        message?.parts?.length &&
-        message.parts.length > 0 &&
-        message.role === "assistant"
-      ) {
-        console.log("Message parts:", message.parts);
+      if (message.role === "assistant") {
+        saveChatMessage({
+          chatId,
+          content: message.content,
+          role: "assistant",
+          parts: message.parts,
+        });
       }
     },
     onToolCall({ toolCall }) {
-      console.log(toolCall);
       if (toolCall.toolName === "visualAgent") {
         return toolCall.args;
       }
@@ -61,6 +62,7 @@ const ChatThread = ({ chatId, initialMessages, file }: ChatThreadProps) => {
       role: m.role,
       content: m.content,
       createdAt: m.createdAt ? new Date(m.createdAt) : undefined,
+      parts: (m.parts || []) as UIMessage["parts"],
     })),
   });
 

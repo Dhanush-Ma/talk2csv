@@ -1,4 +1,11 @@
-import { pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import {
+  jsonb,
+  pgEnum,
+  pgTable,
+  text,
+  timestamp,
+  uuid,
+} from "drizzle-orm/pg-core";
 import chats from "./chat";
 
 export const rolesEnum = pgEnum("roles", [
@@ -18,6 +25,7 @@ const message = pgTable("message", {
     })
     .notNull(),
   createdAt: timestamp("createdAt", { withTimezone: true }).defaultNow(),
+  parts: jsonb("parts").default(null),
 });
 
 export default message;

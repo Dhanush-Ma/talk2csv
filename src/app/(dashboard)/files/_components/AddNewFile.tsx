@@ -140,7 +140,6 @@ const AddNewFile = () => {
         const headers = results.meta.fields || [];
         const rows = results.data;
         const tableName = retrieveUniqueTableName(formatTableName(data.name));
-        console.log("tableName", tableName);
 
         execute({
           ...data,
@@ -266,7 +265,6 @@ const AddNewFile = () => {
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              console.log("remove tag");
                               field.onChange(
                                 field.value.filter((t) => t !== tag)
                               );

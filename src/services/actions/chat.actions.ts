@@ -110,10 +110,11 @@ export const saveChatMessage = actionClient
       chatId: z.string(),
       role: z.enum(["user", "assistant"]),
       content: z.string(),
+      parts: z.array(z.record(z.string(), z.any())).optional(),
     })
   )
   .outputSchema(actionOutputSchema)
-  .action(async ({ parsedInput: { chatId, content, role } }) => {
+  .action(async ({ parsedInput: { chatId, content, role, parts } }) => {
     try {
       const client = await createClient();
       const {
@@ -128,6 +129,7 @@ export const saveChatMessage = actionClient
           chatId,
           role,
           content,
+          parts: parts ? JSON.stringify(parts) : null,
         })
         .returning({ savedMessageId: message.id });
 
@@ -199,6 +201,7 @@ export const createNewChat = actionClient
           chatId: newChat[0].newChatId,
           role: "system",
           content: SYSTEM_PROMPT,
+          parts: null,
         });
 
         return newChat[0].newChatId;

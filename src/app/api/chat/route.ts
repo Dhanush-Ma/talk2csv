@@ -1,10 +1,8 @@
-import { saveChatMessage } from "@/services/actions/chat.actions";
 import { google } from "@ai-sdk/google";
 import { streamText } from "ai";
 import { tools } from "./tools";
 import { openai } from "@ai-sdk/openai";
 import { ChatModel } from "@/types/common/utils.type";
-import { writeJsonToFile } from "../lib/utils";
 
 export const maxDuration = 180;
 
@@ -16,7 +14,7 @@ type ChatRequestBody = {
 };
 
 export async function POST(req: Request) {
-  const { messages, model, chatId } = (await req.json()) as ChatRequestBody;
+  const { messages, model } = (await req.json()) as ChatRequestBody;
 
   const llmModel =
     model.provider === "OpenAI" ? openai(model.id) : google(model.id);
@@ -26,36 +24,6 @@ export async function POST(req: Request) {
     messages,
     tools: tools,
     maxSteps: 2,
-    onFinish: async ({ response }) => {
-      writeJsonToFile(
-        `output/chat-${chatId}-${
-          new Date().toISOString().replace(/[-:]/g, "").split(".")[0]
-        }.json`,
-        response.messages
-      );
-
-      for (const message of response.messages) {
-        const content = message.content[0];
-
-        if (message.role === "assistant") {
-          if (typeof content === "string") {
-            saveChatMessage({
-              chatId,
-              content,
-              role: message.role,
-            });
-          } else if (typeof content === "object" && "type" in content) {
-            if (content.type === "text") {
-              saveChatMessage({
-                chatId,
-                content: content.text,
-                role: message.role,
-              });
-            }
-          }
-        }
-      }
-    },
   });
 
   return result.toDataStreamResponse();
