@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import Logo from "../shared/Logo";
 import { buttonVariants } from "../ui/button";
+import { motion } from "motion/react";
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -16,9 +17,12 @@ const Header = () => {
   }, []);
 
   return (
-    <div
+    <motion.div
+      animate={{ opacity: 1, y: 0, z: 0 }}
+      initial={{ opacity: 0, y: 50, z: 0 }}
+      transition={{ duration: 0.5, ease: "easeInOut" }}
       className={cn(
-        "flex items-center justify-between py-4 mx-auto sticky top-2 overflow-hidden transition-all duration-300 w-[100%] z-[1000]",
+        "flex items-center justify-between py-4 mx-auto sticky top-2 overflow-hidden transition-all duration-300 w-[80%] z-[1000]",
         {
           "backdrop-blur-md bg-primary/10 border border-primary/40 w-full lg:w-[50%] px-10 rounded-full":
             scrolled,
@@ -42,7 +46,7 @@ const Header = () => {
       >
         Upload my CSV
       </a>
-    </div>
+    </motion.div>
   );
 };
 
