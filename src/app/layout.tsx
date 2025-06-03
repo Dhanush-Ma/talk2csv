@@ -7,12 +7,12 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import QueryProvider from "./query-provider";
 
-export const geistSans = Geist({
+const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
 
-export const geistMono = Geist_Mono({
+const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });

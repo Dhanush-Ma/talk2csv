@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -24,13 +25,15 @@ const MarkdownRender = ({ children }: { children: string }) => {
             const [thead, tbody] = React.Children.toArray(children);
 
             const renderHeader = () => {
-              const rows = React.Children.toArray(thead?.props?.children ?? []);
+              const rows = React.Children.toArray(
+                (thead as any)?.props?.children ?? []
+              );
               return (
                 <TableHeader>
                   {rows.map((row, idx) => (
                     <TableRow key={idx}>
                       {React.Children.map(
-                        row?.props?.children ?? [],
+                        (row as any)?.props?.children ?? [],
                         (cell, i) => (
                           <TableHead key={i}>{cell.props.children}</TableHead>
                         )
@@ -42,13 +45,15 @@ const MarkdownRender = ({ children }: { children: string }) => {
             };
 
             const renderBody = () => {
-              const rows = React.Children.toArray(tbody?.props?.children ?? []);
+              const rows = React.Children.toArray(
+                (tbody as any)?.props?.children ?? []
+              );
               return (
                 <TableBody>
                   {rows.map((row, idx) => (
                     <TableRow key={idx}>
                       {React.Children.map(
-                        row?.props?.children ?? [],
+                        (row as any)?.props?.children ?? [],
                         (cell, i) => (
                           <TableCell key={i}>{cell.props.children}</TableCell>
                         )
