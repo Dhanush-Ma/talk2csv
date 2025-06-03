@@ -146,7 +146,7 @@ export function Safari({
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
             href={imageSrc}
-            width="1200"
+            width="1220"
             height="700"
             x="1"
             y="52"

@@ -8,11 +8,13 @@ import { ShimmerButton } from "../magicui/shimmer-button";
 import { useEffect, useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import Iphone15Pro from "../magicui/iphone-15-pro";
+import MockupLaptop1 from "@/assets/mockup-laptop-1.png";
+import MockupLaptop2 from "@/assets/mockup-laptop-2.png";
+import MockupMobile1 from "@/assets/mockup-mobile-1.jpg";
+import MockupMobile2 from "@/assets/mockup-mobile-2.jpg";
 
-const mockups = [
-  "https://cdn.dribbble.com/userupload/16744137/file/original-ddf6650ad6b5c360f3eb7678178b614c.png?resize=1024x768&vertical=center",
-  "https://cdn.dribbble.com/userupload/13312688/file/original-d92951d609a9587a8506d0554c5026e2.png?resize=1024x768&vertical=center",
-];
+const laptopMockups = [MockupLaptop1.src, MockupLaptop2.src];
+const mobileMockups = [MockupMobile1.src, MockupMobile2.src];
 
 const Hero = () => {
   const [mockupIndex, setMockupIndex] = useState(0);
@@ -20,7 +22,7 @@ const Hero = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setMockupIndex((prevIndex) => (prevIndex + 1) % mockups.length);
+      setMockupIndex((prevIndex) => (prevIndex + 1) % laptopMockups.length);
     }, 10000);
 
     return () => clearInterval(interval);
@@ -61,9 +63,9 @@ const Hero = () => {
           lightLineColor="#6366f1"
         />
       </div>
-      <div className="relative z-[9999] w-full h-max py-20 px-10 rounded-lg bg-gradient-to-br from-primary/30 to-primary/40 flex flex-col items-center justify-center gap-y-12 mt-20">
+      <div className="relative w-full h-max py-20 px-10 rounded-2xl bg-gradient-to-br from-primary/30 to-primary/40 flex flex-col items-center justify-center gap-y-12 mt-20">
         <div className="flex items-center justify-center relative gap-8">
-          {Array.from({ length: mockups.length }).map((_, index) => (
+          {Array.from({ length: laptopMockups.length }).map((_, index) => (
             <button
               key={index}
               onClick={() => setMockupIndex(index)}
@@ -79,12 +81,12 @@ const Hero = () => {
           ))}
         </div>
         {isMobile ? (
-          <Iphone15Pro className="size-full" src={mockups[mockupIndex]} />
+          <Iphone15Pro className="size-full" src={mobileMockups[mockupIndex]} />
         ) : (
           <Safari
             url="talk2csv.com"
-            className="w-[90%] h-[90%] rounded-lg overflow-hidden"
-            imageSrc={mockups[mockupIndex]}
+            className="rounded-lg overflow-hidden"
+            imageSrc={laptopMockups[mockupIndex]}
             mode="default"
           />
         )}
